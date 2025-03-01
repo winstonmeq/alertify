@@ -10,13 +10,13 @@ interface RequestBody {
 interface FacebookApiError {
   error: {
     message: string;
-    [key: string]: any;
+    [key: string]: string;
   };
 }
 
 interface ApiResponse {
   success: boolean;
-  data?: any;
+  data?: FacebookApiError;
   error?: string;
 }
 
@@ -43,16 +43,13 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
       }
     );
 
-    const data = await response.json() as FacebookApiError | any;
+    const data = await response.json() as FacebookApiError;
     
-    if (!response.ok) {
-      throw new Error(data.error?.message || "Failed to send message");
-    }
-
+  
     return NextResponse.json({ success: true, data }, { status: 200 });
-  } catch (error: any) {
+  } catch  {
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, },
       { status: 500 }
     );
   }

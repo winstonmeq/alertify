@@ -33,8 +33,8 @@ export default function MessengerPage() {
       } else {
         alert(`Failed to send message: ${data.error}`);
       }
-    } catch (error) {
-      alert("An error occurred while sending the message.");
+    } catch  {
+      alert("An error occurred while sending the message.",);
     }
   };
 
