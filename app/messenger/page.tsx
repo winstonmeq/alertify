@@ -8,14 +8,14 @@ import { JSX } from 'react/jsx-runtime';
 
 interface Messenger {
   _id: string
-  emergency_m: string
-  name_m: string
-  mobile_m: string
-  purok_m: string
-  barangay_m: string
-  position_m: string
-  lat_m: string
-  long_m:string
+  emergency: string
+  name: string
+  mobile: string
+  purok: string
+  barangay: string
+  position: string
+  lat: string
+  long:string
 }
 
 
@@ -50,8 +50,8 @@ export default function Home(): JSX.Element {
 <div>
 {data.map((item,index) => (
           <ul key={index}>
-            <li>Emergercy: {item.emergency_m}</li>
-            <li>Name: {item.name_m}</li> 
+            <li>Emergercy: {item.emergency}</li>
+            <li>Name: {item.name}</li> 
           </ul>
         ))}
 </div>

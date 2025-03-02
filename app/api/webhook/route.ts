@@ -44,16 +44,16 @@ export async function POST(req: Request): Promise<NextResponse> {
 
         if (messageText && senderId) {
           // Save to database
-          await prisma.messenger.create({
+          await prisma.emergency.create({
             data: {
-              emergency_m: messageText,
-              name_m: senderId,
-              lat_m:"",
-              long_m:"",
-              purok_m:"",
-              barangay_m:"",
-              position_m:"",
-              mobile_m:""
+              emergency: messageText,
+              name: senderId,
+              lat:"",
+              long:"",
+              purok:"",
+              barangay:"",
+              position:"",
+              mobile:""
             },
           });
 

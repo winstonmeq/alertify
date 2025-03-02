@@ -1,30 +1,20 @@
 import { NextResponse } from "next/server";
 import { MongoClient, ChangeStreamDocument } from "mongodb";
 
-// Define an interface for your message document structure
-interface MessageDocument {
-  _id: string;
-  content: string;
-  // Add other fields that exist in your messenger collection
-  createdAt?: Date;
-  updatedAt?: Date;
-  // [key: string]: any; // If there are additional dynamic fields
-}
-
 export async function GET() {
   try {
+    // Directly connect using MongoDB since Prisma does NOT support change streams
     const client = new MongoClient(process.env.DATABASE_URL!);
     await client.connect();
 
     const db = client.db();
-    const messenger_watch = db.collection("messenger");
+    const emergency_data = db.collection("emergency"); // Ensure this matches your Prisma model
 
-    // Specify the type in ChangeStreamDocument
-    const changeStream = messenger_watch.watch();
+    const changeStream = emergency_data.watch();
 
     const stream = new ReadableStream({
       start(controller) {
-        changeStream.on("change", (change: ChangeStreamDocument<MessageDocument>) => {
+        changeStream.on("change", (change: ChangeStreamDocument<any>) => {
           if ("fullDocument" in change && change.fullDocument) {
             controller.enqueue(`data: ${JSON.stringify(change.fullDocument)}\n\n`);
           }
