@@ -26,6 +26,7 @@ export default function Home(): JSX.Element {
 
   
   useEffect(() => {
+
     const eventSource = new EventSource("/api/stream");
    
     eventSource.onmessage = async (event) => {
@@ -33,7 +34,7 @@ export default function Home(): JSX.Element {
 
         console.log(event)
        
-        const response = await fetch('/api/emergency');
+        const response = await fetch("/api/emergency");
 
         if (!response.ok) throw new Error("Failed to fetch patient data");
 
