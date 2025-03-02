@@ -94,3 +94,20 @@ model Emergency {
   @@map("emergency")
 
 }
+
+model Messenger {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId 
+  emergency_m String
+  lat_m       String
+  long_m      String
+  mobile_m    String
+  purok_m     String
+  barangay_m  String
+  name_m      String
+  position_m  String
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("messenger")
+
+}

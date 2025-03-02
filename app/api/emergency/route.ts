@@ -73,7 +73,7 @@ export async function POST(request: Request) {
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get('page') || '1', 10);
-  const limit = 5;
+  const limit = 10;
   const skip = (page - 1) * limit;
 
   try {
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
       skip,
       take: limit,
       orderBy: {
-        createdAt: 'desc',
+        createdAt: 'asc',
       },
     });
 
