@@ -28,6 +28,8 @@ export default function Home(): JSX.Element {
   useEffect(() => {
 
     const eventSource = new EventSource("/api/stream");
+
+    console.log(eventSource)
    
     eventSource.onmessage = async (event) => {
       try {

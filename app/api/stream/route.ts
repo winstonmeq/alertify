@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { MongoClient, ChangeStreamDocument } from "mongodb";
+import { NextResponse } from 'next/server';
+import { MongoClient } from 'mongodb';
 
-export async function GET(): Promise<NextResponse> {
+export async function GET() {
   try {
     const databaseUrl = process.env.DATABASE_URL;
     if (!databaseUrl) {
@@ -15,24 +15,29 @@ export async function GET(): Promise<NextResponse> {
     const emergencyData = db.collection("emergency");
     const changeStream = emergencyData.watch();
 
-    const stream = new ReadableStream<Uint8Array>({
+    const stream = new ReadableStream({
       start(controller) {
-        changeStream.on("change", (change: ChangeStreamDocument) => {
-          if ("fullDocument" in change && change.fullDocument) {
-            const data = `data: ${JSON.stringify(change.fullDocument)}\n\n`;
-            controller.enqueue(new TextEncoder().encode(data));
-          }
+        const keepAliveInterval = setInterval(() => {
+          controller.enqueue(': keep-alive\n\n');
+        }, 30000); // Send keep-alive message every 30 seconds
+
+        changeStream.on('change', (change) => {
+          controller.enqueue(`data: ${JSON.stringify(change)}\n\n`);
         });
 
-        changeStream.on("error", (error: Error) => {
-          console.error("Change Stream Error:", error);
+        changeStream.on('error', (error) => {
+          clearInterval(keepAliveInterval);
+          controller.error(error);
+        });
+
+        changeStream.on('end', () => {
+          clearInterval(keepAliveInterval);
           controller.close();
         });
       },
       cancel() {
         changeStream.close();
-        client.close();
-      },
+      }
     });
 
     return new NextResponse(stream, {
