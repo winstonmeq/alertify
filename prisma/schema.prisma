@@ -28,6 +28,9 @@ model User {
   premium       Boolean?
   sessions      Session[]
   accounts      Account[]
+  provinces     Province[]
+  municipalities Municipality[]
+
 
   @@unique([email])
   @@map("user")
@@ -84,16 +87,108 @@ model Emergency {
   lat       String
   long      String
   mobile    String
-  purok     String
   barangay  String
+  munName   String
   name      String
-  position  String
+  photoURL  String
+ status    Boolean  @default(true)
+  verified  Boolean  @default(false)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-
+  munId    String @db.ObjectId
+ municipality Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
+ provId    String @db.ObjectId
+ province Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
+ 
   @@map("emergency")
 
 }
+
+model Postnotify {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId 
+  emergency String
+  lat       String
+  long      String
+  mobile    String
+  purok     String
+  barangay  String
+  munName   String
+  name      String
+  position  String
+  situation String
+  verified  Boolean  @default(false)
+  photoURL  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  provId    String @db.ObjectId
+  province  Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
+  munId    String @db.ObjectId
+  municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
+  @@map("postnotify")
+
+}
+
+
+model Mobuser {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId 
+  firstname  String
+  lastname   String
+  barangay   String
+  sex        String
+  mobile     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  provId     String @db.ObjectId
+  province   Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
+  munId      String @db.ObjectId
+  municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
+
+  @@map("mobuser")
+
+}
+
+
+model Province {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId 
+  provinceName String
+  provinceFCMToken String
+  hotlineNumber    String
+  pdrrmo     String
+  provlogo   String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postnotify Postnotify[]
+  municipality Municipality[]
+  emergency Emergency[]
+  mobuser Mobuser[]
+
+  @@map("province")
+
+}
+
+model Municipality {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId 
+  municipalityName String
+  municipalityFCMToken String
+  hotlineNumber    String
+  mdrrmo     String
+  barangays  String
+  munlogo    String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provId    String    @db.ObjectId
+  province  Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
+ emergency Emergency[]
+ postnotify Postnotify[]
+  mobuser Mobuser[]
+  @@map("municipality")
+
+}
+
 
 model Messenger {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId 
