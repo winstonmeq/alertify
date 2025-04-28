@@ -20,12 +20,10 @@ export async function POST(request: Request) {
         emergency,
         lat,
         long,
-        purok,
         barangay,
         munName,
         name,
         mobile,
-        position,
         munId,
         provId,          
         photoURL,
@@ -38,10 +36,8 @@ export async function POST(request: Request) {
         !emergency ||
         !lat ||
         !long ||
-        !purok ||
         !barangay ||
         !name ||
-        !position ||
         !mobile ||
         !munId ||
         !provId
@@ -60,11 +56,9 @@ export async function POST(request: Request) {
           emergency,
           lat,
           long,
-          purok,
           barangay,
           munName,
           name,
-          position,
           mobile,       
           munId,
           provId,

@@ -1,6 +1,6 @@
 
 import { PrismaClient } from "@prisma/client";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 
 const prisma = new PrismaClient();
@@ -29,6 +29,10 @@ export async function POST(request: Request) {
     const savedData = await prisma.mobuser.create({
       data: { firstname, lastname, barangay, sex, mobile, munId, provId }
     });
+
+    if (savedData === null) {
+      return NextResponse.json({ message: "Failed to save data" }, { status: 500 });
+    }
 
       return NextResponse.json(
       { message: "mobile user saved successfully" },

@@ -11,12 +11,10 @@ interface Emergency {
   emergency: string;
   lat: string;
   long: string;
-  // purok: string;
   barangay: string;
-  munName:String;
+  munName:string;
   name: string;
   mobile: string;
-  // position: string;
   munId: string;
   provId: string;
   photoURL: string;
