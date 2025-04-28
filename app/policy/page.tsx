@@ -1,10 +1,11 @@
 
 
-
 import React from 'react'
 
-export const PolicyPage = () => {
+const PolicyPage = () => {
   return (
     <div>PolicyPage</div>
   )
 }
+
+export default PolicyPage
