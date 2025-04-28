@@ -59,21 +59,6 @@ if (!admin.apps.length) {
   });
 }
 
-// async function sendFcmNotification2(data: Emergency) {
-//   const { position, emergency, barangay } = data;
-//   try {
-//     await admin.messaging().send({
-//       notification: {
-//         title: "Emergency Reported!",
-//         body: `${position} reported a ${emergency} emergency in ${barangay}.`,
-//       },
-//       topic: "presroxascot2025",
-//     });
-//     console.log("FCM notification sent successfully");
-//   } catch (error) {
-//     console.error("Failed to send FCM notification:", error);
-//   }
-// }
 
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
