@@ -134,8 +134,8 @@ model Mobuser {
   firstname  String
   lastname   String
   barangay   String
-  sex        String
-  mobile     String
+  mobile     String @unique
+  password   String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   provId     String @db.ObjectId

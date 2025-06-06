@@ -19,15 +19,15 @@ export async function POST(request: Request) {
 
   try {
     const requestBody = await request.json();
-    const { firstname, lastname, barangay, mobile, sex, munId, provId } =
+    const { firstname, lastname, barangay, mobile, password, munId, provId } =
       requestBody;
 
-    if (!firstname || !lastname || !barangay || !sex || !munId || !provId) {
+    if (!firstname || !lastname || !barangay || !password || !munId || !provId) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     const savedData = await prisma.mobuser.create({
-      data: { firstname, lastname, barangay, sex, mobile, munId, provId }
+      data: { firstname, lastname, barangay, password, mobile, munId, provId }
     });
 
     if (savedData === null) {

@@ -25,7 +25,7 @@ export async function POST(request: Request) {
         name,
         mobile,
         munId,
-        provId,          
+        provId,
         photoURL,
       } = requestBody;
 
@@ -41,8 +41,6 @@ export async function POST(request: Request) {
         !mobile ||
         !munId ||
         !provId
-     
-
       ) {
         return NextResponse.json(
           { error: "Missing required fields" },
@@ -59,13 +57,12 @@ export async function POST(request: Request) {
           barangay,
           munName,
           name,
-          mobile,       
+          mobile,
           munId,
           provId,
           photoURL: photoURL || "",
           status: true,
           verified: false,
-         
         },
       });
 
@@ -87,10 +84,7 @@ export async function POST(request: Request) {
   }
 }
 
-
-
 export async function GET(request: NextRequest) {
-
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1", 30);
   const limit = 30;
@@ -102,7 +96,7 @@ export async function GET(request: NextRequest) {
     const emergency_data = await prisma.emergency.findMany({
       where: {
         ...(provId && { provId }), // Conditionally include provId in the filter
-        ...(munId && { munId }),   // Conditionally include munId in the filter
+        ...(munId && { munId }), // Conditionally include munId in the filter
       },
       skip,
       take: limit,
@@ -116,9 +110,15 @@ export async function GET(request: NextRequest) {
     const response = NextResponse.json({ emergency_data, totalRecords });
 
     // Add CORS headers
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    response.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
 
     return response;
   } catch (error) {

@@ -33,12 +33,12 @@ if (!admin.apps.length) {
 }
 
 async function sendFcmNotification(data: Emergency) {
-  const { emergency, barangay } = data;
+  const { emergency, name } = data;
   try {
     await admin.messaging().send({
       notification: {
         title: "Emergency Reported!",
-        body: `${name} reported a ${emergency} emergency in ${barangay}.`,
+        body: `${name} reported a ${emergency} incident!`,
       },
       topic: "presroxascot2025",
     });
