@@ -11,12 +11,10 @@ interface Emergency {
   emergency: string;
   lat: string;
   long: string;
-  purok: string;
   barangay: string;
   munName: string;
   name: string;
   mobile: string;
-  position: string;
   munId: string;
   provId: string;
   photoURL: string;
@@ -37,13 +35,13 @@ if (!admin.apps.length) {
 
 
 async function sendFcmNotification(data: Emergency) {
-  const { position, emergency, barangay } = data;
+  const { name, emergency, } = data;
   try {
     await admin.messaging().send({
       
       notification: {
         title: "Incident Report!",
-        body: `${position} reported a ${emergency} emergency in ${barangay}.`,
+        body: `${name} reported a ${emergency} incident!.`,
       },
       topic: "cotabatotoken2025",
     });
@@ -63,15 +61,15 @@ export async function POST(request: Request) {
 
   try {
     const requestBody = await request.json();
-    const { emergency, lat, long, purok, barangay,munName, name, mobile, position, photoURL, situation, munId, provId } =
+    const { emergency, lat, long, barangay,munName, name, mobile, photoURL, situation, munId, provId } =
       requestBody;
 
-    if (!emergency || !lat || !long || !purok || !barangay || !name || !position || !mobile) {
+    if (!emergency || !lat || !long || !barangay || !name || !mobile) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     const savedData = await prisma.postnotify.create({
-      data: { emergency, lat, long, purok, barangay, munName, name, mobile, position, verified: true, photoURL, situation, munId, provId }
+      data: { emergency, lat, long, barangay, munName, name, mobile, verified: true, photoURL, situation, munId, provId }
     });
 
     

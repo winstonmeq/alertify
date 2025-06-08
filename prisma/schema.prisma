@@ -110,11 +110,9 @@ model Postnotify {
   lat       String
   long      String
   mobile    String
-  purok     String
   barangay  String
   munName   String
   name      String
-  position  String
   situation String
   verified  Boolean  @default(false)
   photoURL  String

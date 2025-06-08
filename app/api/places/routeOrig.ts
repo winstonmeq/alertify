@@ -12,26 +12,7 @@ interface Point {
 interface EmergencyResponse {
   message: string;
   matchedPolygons?: string[];
-  nearbyPolygons200m?: string[];
-  nearbyPolygons500m?: string[];
-
-
   status: string;
-}
-
-// Haversine formula to calculate distance between two points in meters
-function getDistance(point1: Point, point2: Point): number {
-  const R = 6371e3; // Earth's radius in meters
-  const φ1 = (point1.lat * Math.PI) / 180;
-  const φ2 = (point2.lat * Math.PI) / 180;
-  const Δφ = ((point2.lat - point1.lat) * Math.PI) / 180;
-  const Δλ = ((point2.long - point1.long) * Math.PI) / 180;
-
-  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-            Math.cos(φ1) * Math.cos(φ2) *
-            Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // Distance in meters
 }
 
 function isPointInPolygon(point: Point, polygon: Point[]): boolean {
@@ -55,7 +36,9 @@ function isPointInPolygon(point: Point, polygon: Point[]): boolean {
 }
 
 export async function POST(request: NextRequest) {
+
   try {
+
     // Parse and validate request body
     const requestBody = await request.json();
     const { lat, long } = requestBody;
@@ -75,36 +58,18 @@ export async function POST(request: NextRequest) {
     }
 
     const point: Point = { lat: Number(lat), long: Number(long) };
-
-    // Find matching polygons (point inside polygon)
-    const matchedPolygons = polygons.filter(poly =>
+    
+    // Find matching polygons
+    const matchedPolygons = polygons.filter(poly => 
       isPointInPolygon(point, poly.points)
     );
 
-    // Find nearby polygons (within 50 meters)
-    const nearbyPolygons200 = polygons.filter(poly =>
-      poly.points.some(polyPoint => getDistance(point, polyPoint) <= 100)
-    );
-
-    // Find nearby polygons (within 500 meters but greater than or equal to 200 meters)
-    const nearbyPolygons500 = polygons.filter(poly =>
-      poly.points.some(polyPoint => {
-        const distance = getDistance(point, polyPoint);
-        return distance >= 110 && distance <= 500;
-      })
-    );
-
-   
     // Prepare response
     const response: EmergencyResponse = {
       message: "Success",
-      status: matchedPolygons.length > 0
+      status: matchedPolygons.length > 0 
         ? matchedPolygons.map(poly => poly.name).join(', ')
         : 'unknown location',
-      matchedPolygons: matchedPolygons.map(poly => poly.name),
-      nearbyPolygons200m: nearbyPolygons200.map(poly => poly.name),
-      nearbyPolygons500m: nearbyPolygons500.map(poly => poly.name),
-
     };
 
     return NextResponse.json(response, { status: 201 });

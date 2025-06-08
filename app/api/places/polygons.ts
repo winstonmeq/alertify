@@ -99,6 +99,15 @@ export const polygons: Polygon[] = [
     ]
   },
 
+    {
+    name: "sample",
+    points: [
+      { lat: 7.155053, long: 125.050598 },
+      { lat: 7.155478, long: 125.050738 },
+      { lat: 7.155335, long: 125.051172 },
+      { lat: 7.154707, long: 125.050780 }
+    ]
+  },
 
   {
     name: "Poblacion",
@@ -122,6 +131,8 @@ export const polygons: Polygon[] = [
       { lat: 7.139853441343385, long: 124.997350593937 }
     ]
   },
+
+
   {
     name: "Tuael",
     points: [
