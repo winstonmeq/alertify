@@ -99,15 +99,17 @@ export async function GET(request: NextRequest) {
   const page = parseInt(searchParams.get('page') || '1', 30);
   const limit = 30;
   const skip = (page - 1) * limit;
-  const provId = searchParams.get("provId") || undefined; // Get provId from query params, default to undefined if not provided
   // const todayDate = searchParams.get("createdAt") || undefined; // Get provId from query params, default to undefined if not provided
+ const munId = searchParams.get("munId") || undefined; // Get munId from query params, default to undefined if not provided
+  const provId = searchParams.get("provId") || undefined; // Get provId from query params, default to undefined if not provided
 
 
   try {
     const emergency_data = await prisma.postnotify.findMany({
 
       where: {
-        ...(provId && { provId }), // Conditionally include provId in the filter
+        ...(provId && { provId }),
+         ...(munId && { munId }), 
       },
 
       skip,

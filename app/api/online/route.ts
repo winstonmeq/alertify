@@ -33,30 +33,20 @@ if (!admin.apps.length) {
 }
 
 async function sendFcmNotification(data: Emergency) {
-  const { emergency, name } = data;
+  const { emergency, name, munId } = data;
+  // const topic ="presroxascot2025"
   try {
     await admin.messaging().send({
       notification: {
         title: "Emergency Reported!",
         body: `${name} reported a ${emergency} incident!`,
       },
-      topic: "presroxascot2025",
+      topic: munId,
     });
-    console.log("FCM notification sent successfully");
+    console.log("Online FCM notification sent successfully");
   } catch (error) {
     console.error("Failed to send FCM notification:", error);
   }
-}
-
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID2,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY2?.replace(/\\n/g, "\n"),
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL2,
-      
-    }),
-  });
 }
 
 
@@ -83,7 +73,6 @@ export async function POST(request: Request) {
 
     // Send FCM notification asynchronously
     sendFcmNotification(savedData).catch(console.error);
-    // sendFcmNotification2(savedData).catch(console.error);
 
     //send response to the client
     return NextResponse.json(
