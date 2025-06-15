@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // import prisma from '@/lib/prisma';
 import { PrismaClient } from "@prisma/client";
 
-import bcrypt from 'bcryptjs';
+// import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
@@ -49,7 +49,6 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    console.log('User found:', user); // For debugging
 
     if (!user) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
@@ -64,6 +63,7 @@ export async function POST(request: NextRequest) {
     // Generate JWT
     const token = jwt.sign(
       { userId: user.id, email: user.email, wname: user.wname
+        
          },
       process.env.JWT_SECRET!,
       { expiresIn: '1h' }
@@ -73,7 +73,9 @@ export async function POST(request: NextRequest) {
       { 
         data: {
         token, user: { id: user.id, email: user.email, 
-        wname: user.wname, munId:user.municipality.id, provId: user.province.id }
+        wname: user.wname, munId:user.municipality.id, provId: user.province.id,
+       lat:user.municipality.lat, long:user.municipality.long
+      }
 
 
         }

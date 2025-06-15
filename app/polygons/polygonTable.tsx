@@ -39,6 +39,7 @@ export default function PolygonTable({ polygons }: PolygonTableProps) {
       }
     } catch (error) {
       toast('Failed to delete polygon', { style: { background: 'red', color: 'white' } });
+      console.log(error)
     }
     setOpen(false);
   };

@@ -1,121 +1,165 @@
-import { PrismaClient } from "@prisma/client";
-import { NextResponse, NextRequest } from "next/server";
-import { polygons } from './polygons';
+import { NextResponse } from "next/server";
+import { polygons } from "./polygons";
 
-const prisma = new PrismaClient();
 
-interface Point {
-  lat: number;
-  long: number;
+interface PolygonInfo {
+  id: number;
+  name: string;
 }
 
-interface EmergencyResponse {
-  message: string;
-  matchedPolygons?: string[];
-  nearbyPolygons200m?: string[];
-  nearbyPolygons500m?: string[];
-
-
-  status: string;
+interface LocationResponse {
+  current: PolygonInfo[];
+  nearby200: PolygonInfo[];
+  nearby500: PolygonInfo[];
 }
 
-// Haversine formula to calculate distance between two points in meters
-function getDistance(point1: Point, point2: Point): number {
-  const R = 6371e3; // Earth's radius in meters
-  const φ1 = (point1.lat * Math.PI) / 180;
-  const φ2 = (point2.lat * Math.PI) / 180;
-  const Δφ = ((point2.lat - point1.lat) * Math.PI) / 180;
-  const Δλ = ((point2.long - point1.long) * Math.PI) / 180;
 
-  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-            Math.cos(φ1) * Math.cos(φ2) *
-            Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // Distance in meters
+// Helper function to add CORS headers
+function addCorsHeaders(response: NextResponse) {
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  return response;
 }
 
-function isPointInPolygon(point: Point, polygon: Point[]): boolean {
-  let inside = false;
-  const { lat, long } = point;
-
-  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-    const xi = polygon[i].lat;
-    const yi = polygon[i].long;
-    const xj = polygon[j].lat;
-    const yj = polygon[j].long;
-
-    const intersect =
-      (yi > long) !== (yj > long) &&
-      lat < ((xj - xi) * (long - yi)) / (yj - yi + Number.EPSILON) + xi;
-
-    if (intersect) inside = !inside;
-  }
-
-  return inside;
+// Handle OPTIONS preflight requests
+export async function OPTIONS() {
+  const response = NextResponse.json({}, { status: 200 });
+  return addCorsHeaders(response);
 }
 
-export async function POST(request: NextRequest) {
+
+
+export async function POST(req: Request) {
   try {
-    // Parse and validate request body
-    const requestBody = await request.json();
-    const { lat, long } = requestBody;
+    const body = await req.json();
+    const { lat, long } = body;
 
-    if (!lat || !long) {
+    // Validate presence and type of coordinates
+    if (
+      lat === undefined || long === undefined ||
+      lat === '' || long === ''
+    ) {
       return NextResponse.json(
-        { error: "Missing required coordinates" },
+        { error: "Missing or empty coordinates" },
         { status: 400 }
       );
     }
 
-    if (isNaN(lat) || isNaN(long)) {
+    const latNum = parseFloat(lat);
+    const longNum = parseFloat(long);
+
+    if (isNaN(latNum) || isNaN(longNum)) {
       return NextResponse.json(
         { error: "Invalid coordinate format" },
         { status: 400 }
       );
     }
 
-    const point: Point = { lat: Number(lat), long: Number(long) };
+    const point: Point = { lat: latNum, long: longNum };
 
-    // Find matching polygons (point inside polygon)
-    const matchedPolygons = polygons.filter(poly =>
-      isPointInPolygon(point, poly.points)
+    // Function to compute centroid of polygon
+    function getCentroid(points: Point[]): Point {
+      const total = points.length;
+      const sum = points.reduce((acc, p) => {
+        acc.lat += p.lat;
+        acc.long += p.long;
+        return acc;
+      }, { lat: 0, long: 0 });
+
+      return {
+        lat: sum.lat / total,
+        long: sum.long / total
+      };
+    }
+
+    // Haversine formula for distance between two points (in meters)
+    function getDistance(a: Point, b: Point): number {
+      const R = 6371e3; // Earth radius in meters
+      const toRad = (deg: number) => (deg * Math.PI) / 180;
+
+      const dLat = toRad(b.lat - a.lat);
+      const dLon = toRad(b.long - a.long);
+      const lat1 = toRad(a.lat);
+      const lat2 = toRad(b.lat);
+
+      const aCalc =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1) * Math.cos(lat2) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(aCalc), Math.sqrt(1 - aCalc));
+
+      return R * c;
+    }
+
+    // 1. Check if point is inside any polygon
+    function pointInPolygon(point: Point, polygon: Point[]): boolean {
+      let inside = false;
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].lat, yi = polygon[i].long;
+        const xj = polygon[j].lat, yj = polygon[j].long;
+
+        const intersect =
+          yi > point.long !== yj > point.long &&
+          point.lat < (xj - xi) * (point.long - yi) / (yj - yi + 0.0000001) + xi;
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    const matchedPolygons = polygons.filter(polygon =>
+      pointInPolygon(point, polygon.points)
     );
 
-    // Find nearby polygons (within 50 meters)
-    const nearbyPolygons200 = polygons.filter(poly =>
-      poly.points.some(polyPoint => getDistance(point, polyPoint) <= 100)
+    const nearbyPolygons200 = polygons.filter(polygon =>
+      getDistance(point, getCentroid(polygon.points)) <= 200
     );
 
-    // Find nearby polygons (within 500 meters but greater than or equal to 200 meters)
-    const nearbyPolygons500 = polygons.filter(poly =>
-      poly.points.some(polyPoint => {
-        const distance = getDistance(point, polyPoint);
-        return distance >= 110 && distance <= 500;
-      })
-    );
+    const nearbyPolygons500 = polygons.filter(polygon => {
+      const dist = getDistance(point, getCentroid(polygon.points));
+      return dist > 200 && dist <= 500;
+    });
 
-   
-    // Prepare response
-    const response: EmergencyResponse = {
-      message: "Success",
-      status: matchedPolygons.length > 0
-        ? matchedPolygons.map(poly => poly.name).join(', ')
-        : 'unknown location',
-      matchedPolygons: matchedPolygons.map(poly => poly.name),
-      nearbyPolygons200m: nearbyPolygons200.map(poly => poly.name),
-      nearbyPolygons500m: nearbyPolygons500.map(poly => poly.name),
-
+    const responseLoc: LocationResponse = {
+      current: matchedPolygons.map((p, i) => ({
+        id: i,
+        name: p.name,
+      })),
+      nearby200: nearbyPolygons200.map((p, i) => ({
+        id: i,
+        name: p.name,
+      })),
+      nearby500: nearbyPolygons500.map((p, i) => ({
+        id: i,
+        name: p.name,
+      })),
     };
 
-    return NextResponse.json(response, { status: 201 });
+    // if (
+    //   responseLoc.current.length === 0 &&
+    //   responseLoc.nearby200.length === 0 &&
+    //   responseLoc.nearby500.length === 0
+    // ) {
+    //   responseLoc.message = "No polygon match or nearby area found.";
+    // }
+
+    const response =  NextResponse.json(responseLoc, { status: 200 });
+
+    
+    return addCorsHeaders(response);
+
+
 
   } catch (error) {
-    console.error("Error processing emergency location:", error);
     return NextResponse.json(
-      { message: "Failed to process location data" },
+      { error: "Server error", details: String(error) },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
+
+// Types
+type Point = {
+  lat: number;
+  long: number;
+};

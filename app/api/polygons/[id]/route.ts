@@ -50,6 +50,7 @@ export async function PUT(
     });
     return NextResponse.json(polygon);
   } catch (error) {
+    console.log(error)
     return NextResponse.json({ error: 'Failed to update polygon' }, { status: 500 });
   }
 }
@@ -65,6 +66,8 @@ export async function DELETE(
     await prisma.polygon.delete({ where: { id } });
     return NextResponse.json({ message: 'Polygon deleted' });
   } catch (error) {
+        console.log(error)
+
     return NextResponse.json({ error: 'Failed to delete polygon' }, { status: 500 });
   }
 }

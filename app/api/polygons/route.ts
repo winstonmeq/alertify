@@ -34,6 +34,7 @@ export async function POST(request: Request) {
     return addCorsHeaders(response);
   } catch (error) {
     const response = NextResponse.json({ error: 'Failed to create polygon' }, { status: 500 });
+    console.log(error)
     return addCorsHeaders(response);
   }
 }
@@ -62,6 +63,7 @@ export async function GET(request: NextRequest) {
     
   } catch (error) {
     const response = NextResponse.json({ error: 'Failed to fetch polygons' }, { status: 500 });
+    console.log(error)
     return addCorsHeaders(response);
   }
 }

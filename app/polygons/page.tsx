@@ -7,8 +7,6 @@ import { notFound } from 'next/navigation';
 export default async function Home() {
  
 
-  // Use an absolute URL — this is required in server components
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
   const response = await fetch('http://localhost:3001/api/polygons', {
     method: 'GET',

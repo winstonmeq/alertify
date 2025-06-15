@@ -204,5 +204,15 @@ export const polygons: Polygon[] = [
       { lat: 7.147910, long: 125.021888 },
       { lat: 7.134935, long: 125.020215 }
     ]
+  },
+
+   {
+    name: "Bible School",
+    points: [
+      { lat: 7.014629, long: 125.117439 },
+      { lat: 7.014807, long: 125.117455 },
+      { lat: 7.014759, long: 125.117708 },
+      { lat: 7.014539, long: 125.117693 }
+    ]
   }
 ];

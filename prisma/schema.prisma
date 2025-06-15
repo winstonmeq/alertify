@@ -189,6 +189,8 @@ model Municipality {
   municipalityName String
   municipalityFCMToken String
   hotlineNumber    String
+  lat       String?
+  long      String?
   mdrrmo     String
   barangays  String
   munlogo    String
@@ -245,3 +247,12 @@ model Point {
   polygon Polygon @relation("PolygonPoints", fields: [polygonId], references: [id]) 
   @@map("points")
   }
+
+
+model GeoPolygon {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId 
+  name     String
+  geometry Json     // Store GeoJSON Polygon here
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

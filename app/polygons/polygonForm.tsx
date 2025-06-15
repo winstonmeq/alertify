@@ -43,6 +43,7 @@ export default function PolygonForm({ initialData }: PolygonFormProps) {
       }
     } catch (error) {
       toast('Failed to save polygon');
+      console.log(error)
     }
   };
 

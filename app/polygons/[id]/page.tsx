@@ -13,8 +13,6 @@ export default async function EditPolygon({ params }: PageProps) {
     notFound();
   }
 
-  // Use an absolute URL — this is required in server components
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
   const response = await fetch(`http://localhost:3001/api/polygons/${id}`, {
     method: 'GET',
