@@ -40,8 +40,11 @@ export default function Home() {
   // Fetch polygons
   useEffect(() => {
     const fetchPolygons = async () => {
+
       setIsLoadingPolygons(true);
+
       setPolygonError(null);
+
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/polygons`, {
           method: 'GET',
@@ -58,10 +61,15 @@ export default function Home() {
         const polygonsData = await response.json();
         // Optional: Validate polygonsData with a schema (e.g., Zod)
         setPolygons(polygonsData);
+
       } catch (err) {
+
         setPolygonError(err instanceof Error ? err.message : 'An error occurred');
+
       } finally {
+
         setIsLoadingPolygons(false);
+        
       }
     };
 
