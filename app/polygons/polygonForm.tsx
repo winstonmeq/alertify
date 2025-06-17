@@ -73,7 +73,7 @@ export default function PolygonForm({ initialData }: PolygonFormProps) {
         <Label>Points</Label>
         {points.map((point, index) => (
           <div key={index} className="flex space-x-2 mt-2">
-            <Label>Lng</Label>
+            <Label>Lat</Label>
             <Input
               type="number"
               step="any"
@@ -82,7 +82,7 @@ export default function PolygonForm({ initialData }: PolygonFormProps) {
               onChange={(e) => updatePoint(index, 'lat', e.target.value)}
               className="w-1/2"
             />
-            <Label>Lat</Label>
+            <Label>Long</Label>
             <Input
               type="number"
               step="any"
