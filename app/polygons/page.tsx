@@ -43,7 +43,7 @@ export default function Home() {
       setIsLoadingPolygons(true);
       setPolygonError(null);
       try {
-        const response = await fetch(`http://localhost:3001/api/polygons`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/polygons`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

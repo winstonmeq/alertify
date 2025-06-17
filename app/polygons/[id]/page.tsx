@@ -14,7 +14,7 @@ export default async function EditPolygon({ params }: PageProps) {
   }
 
 
-  const response = await fetch(`http://localhost:3001/api/polygons/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/polygons/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export default async function EditPolygon({ params }: PageProps) {
   const polygon = await response.json();
 
   return (
-    <div>
+    <div className='p-10'>
       <h2 className="text-xl font-semibold mb-6">Edit Polygon</h2>
       <PolygonForm
         initialData={{

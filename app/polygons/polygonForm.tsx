@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-// Update the import path below if the actual path is different, e.g.:
 import { toast } from 'sonner';
 
 type Point = { lat: number; long: number };
@@ -22,10 +21,45 @@ export default function PolygonForm({ initialData }: PolygonFormProps) {
   const [points, setPoints] = useState<Point[]>(initialData?.points || [{ lat: 0, long: 0 }]);
   const router = useRouter();
 
+  const validateInputs = (): boolean => {
+    if (!name.trim()) {
+      toast('Location name is required');
+      return false;
+    }
+    if (!munId.trim()) {
+      toast('Municipality ID is required');
+      return false;
+    }
+    if (!provId.trim()) {
+      toast('Province ID is required');
+      return false;
+    }
+    if (points.length === 0) {
+      toast('At least one point is required');
+      return false;
+    }
+    for (const point of points) {
+      if (isNaN(point.lat) || isNaN(point.long)) {
+        toast('All points must have valid latitude and longitude values');
+        return false;
+      }
+      if (point.lat === 0 && point.long === 0) {
+        toast('Points cannot have both latitude and longitude as 0');
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateInputs()) {
+      return;
+    }
+
     const method = initialData ? 'PUT' : 'POST';
-    const url = initialData ? `/api/polygons/${initialData.id}` : '/api/polygons';
+    const url = initialData ? `${process.env.NEXT_PUBLIC_DOMAIN}/api/polygons/${initialData.id}` : `${process.env.NEXT_PUBLIC_DOMAIN}/api/polygons`;
 
     try {
       const res = await fetch(url, {
@@ -34,16 +68,15 @@ export default function PolygonForm({ initialData }: PolygonFormProps) {
         body: JSON.stringify({ name, munId, provId, points }),
       });
 
-      console.log(res)
       if (res.ok) {
         alert(`Polygon ${initialData ? 'updated' : 'created'} successfully`);
-        // router.push('/');
+        router.push('/polygons');
       } else {
         throw new Error('Failed to save polygon');
       }
     } catch (error) {
       toast('Failed to save polygon');
-      console.log(error)
+      console.log(error);
     }
   };
 

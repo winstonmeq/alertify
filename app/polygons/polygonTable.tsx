@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 
 type Polygon = { 
   id: string; 
@@ -30,15 +29,16 @@ export default function PolygonTable({ polygons }: PolygonTableProps) {
   const handleDelete = async () => {
     if (!selectedId) return;
     try {
-      const res = await fetch(`/api/polygons/${selectedId}`, { method: 'DELETE' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/polygons/${selectedId}`, { method: 'DELETE' });
+
+      console.log(res)
+
       if (res.ok) {
-        toast('Polygon deleted successfully');
-        router.refresh();
+        router.push("/polygons")
       } else {
         throw new Error('Failed to delete polygon');
       }
     } catch (error) {
-      toast('Failed to delete polygon', { style: { background: 'red', color: 'white' } });
       console.log(error)
     }
     setOpen(false);

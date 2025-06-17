@@ -230,9 +230,9 @@ model Messenger {
 model Polygon { 
   id String   @id @default(auto()) @map("_id") @db.ObjectId 
   name String 
+  points Point[] @relation("PolygonPoints") 
   munId String @db.ObjectId 
   provId String @db.ObjectId 
-  points Point[] @relation("PolygonPoints") 
   province  Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
   municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
     @@map("polygon")

@@ -39,6 +39,8 @@ export async function POST(request: Request) {
   }
 }
 
+
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const munId = searchParams.get("munId") || undefined;
@@ -51,9 +53,18 @@ export async function GET(request: NextRequest) {
         ...(munId && { munId }),
       },
       include: {
-        province: true,
-        municipality: true,
+       
         points: true,
+        municipality: {
+          select: {
+            municipalityName : true 
+          }          
+        },
+        province: {
+          select: {
+            provinceName: true
+          }
+        }
       },
     });
 
