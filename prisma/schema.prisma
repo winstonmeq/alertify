@@ -250,9 +250,12 @@ model Point {
 
 
 model GeoPolygon {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId 
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  polType  String? 
   name     String
   geometry Json     // Store GeoJSON Polygon here
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@map("geopolygon")
 }
+

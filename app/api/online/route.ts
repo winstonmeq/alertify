@@ -21,6 +21,11 @@ interface Emergency {
   createdAt?: Date; // Optional, added by Prisma
 }
 
+interface PolygonInfo {
+  polType: string;
+  name: string;
+}
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
@@ -32,8 +37,8 @@ if (!admin.apps.length) {
   });
 }
 
-async function sendFcmNotification(data: Emergency) {
-  const { emergency, name, munId } = data;
+async function sendFcmNotification(data: Emergency, topicFilter:string) {
+  const { emergency, name} = data;
   // const topic ="presroxascot2025"
   try {
     await admin.messaging().send({
@@ -41,7 +46,7 @@ async function sendFcmNotification(data: Emergency) {
         title: "Emergency Reported!",
         body: `${name} reported a ${emergency} incident!`,
       },
-      topic: munId,
+      topic: topicFilter,
     });
     console.log("Online FCM notification sent successfully");
   } catch (error) {
@@ -60,19 +65,65 @@ export async function POST(request: Request) {
 
   try {
     const requestBody = await request.json();
+
     const { emergency, lat, long, barangay, munName, name, mobile, munId, provId, photoURL, } = requestBody;
 
     if (!emergency || !lat || !long  || !barangay || !name || !mobile) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // Save data to the database using Prisma
+    const data = {lat, long}
+
+  // Forward the request to the external API
+    const externalResponse = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/places`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+// Parse and log the external API response
+    const externalData = await externalResponse.json();
+
+  
+    const filtered = externalData.current?.filter(
+  (item: { polType: string; name: string }) => !(item.polType === "mun")
+);
+
+ 
+
+
+    //tama ni code para ma check naku ang municipality name
+const locationIncident = filtered.length >= 1 ? filtered.map((item: PolygonInfo) => item.name).join(", ") : "Unknow Location";
+
+  //this code to get last name of the array 
+    console.log("External API response:", locationIncident);
+
+const topicFilter = externalData.current?.filter(
+  (item: { polType: string; name: string }) => (item.polType === "mun")
+);
+
+const fcmTopic = topicFilter.map((item:PolygonInfo) => item.name).join(", ")
+
+console.log('topic', fcmTopic)
+
+
+  
+  // Save data to the database using Prisma
     const savedData = await prisma.emergency.create({
-      data: { emergency, lat, long, barangay, munName, name, mobile, munId, provId, status: true, verified: false, photoURL },
+      data: { 
+        emergency, 
+        lat, 
+        long, 
+        barangay: locationIncident, 
+        munName, name, mobile, munId, provId, status: true, verified: false, photoURL },
     });
 
     // Send FCM notification asynchronously
-    sendFcmNotification(savedData).catch(console.error);
+    sendFcmNotification(savedData, fcmTopic).catch(console.error);
 
     //send response to the client
     return NextResponse.json(

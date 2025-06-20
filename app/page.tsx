@@ -1,6 +1,8 @@
 'use client';
 
 import { authClient } from "@/lib/auth-client";
+
+import Link from "next/link"
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -54,6 +56,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white">
+      <div className="flex flex-row items-center justify-center gap-4 p-4">
+        <Link href="/geopolygons">Geo Polygons</Link> 
+        <Link href="/polygons">Polygons</Link></div>
       <h1 className="text-2xl">Q-ALERT S1 {session?.user?.email}</h1>
       <button
         className="px-4 py-2 mt-5 rounded-sm border-1px border-solid bg-orange-700 text-white font-bold"
