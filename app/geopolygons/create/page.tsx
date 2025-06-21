@@ -26,7 +26,7 @@ export default function CreatePolygon() {
       });
 
       if (!res.ok) throw new Error('Failed to create polygon');
-      router.push('/');
+      router.push('/geopolygons');
     } catch (err) {
       setError('Error creating polygon: ' + (err instanceof Error ? err.message : 'Unknown error'));
     }

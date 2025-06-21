@@ -88,6 +88,8 @@ model Emergency {
   long      String
   mobile    String
   barangay  String
+  nearby200 String?
+  nearby500 String?
   munName   String
   name      String
   photoURL  String
@@ -191,6 +193,7 @@ model Municipality {
   hotlineNumber    String
   lat       String?
   long      String?
+  zoom      String?
   mdrrmo     String
   barangays  String
   munlogo    String

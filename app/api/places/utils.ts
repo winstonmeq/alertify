@@ -1,7 +1,5 @@
-// app/api/places/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+// app/api/places/utils.ts
 import { PrismaClient } from '@prisma/client';
-import { getLocationData, PolygonInfo } from './utils';
 
 const prisma = new PrismaClient();
 
@@ -20,29 +18,24 @@ interface GeoPolygon {
   } | null;
 }
 
-interface LocationResponse {
+export interface PolygonInfo {
+  polType: string;
+  name: string;
+}
+
+export interface PlacesResponse {
   current: PolygonInfo[];
   nearby200: PolygonInfo[];
   nearby500: PolygonInfo[];
 }
 
+// Custom sorting function for polType order
 const polTypeOrder = ['bldg', 'lot', 'road', 'bar', 'mun'];
 const getPolTypeIndex = (polType: string): number => {
   const index = polTypeOrder.indexOf(polType.toLowerCase());
   return index === -1 ? polTypeOrder.length : index;
 };
 
-function addCorsHeaders(response: NextResponse) {
-  response.headers.set('Access-Control-Allow-Origin', '*');
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  return response;
-}
-
-export async function OPTIONS() {
-  const response = NextResponse.json({}, { status: 200 });
-  return addCorsHeaders(response);
-}
 
 function getEdgeDistance(polygonA: Point[], polygonB: Point[]): number {
   const R = 6371e3; // Earth radius in meters
@@ -71,20 +64,19 @@ function getEdgeDistance(polygonA: Point[], polygonB: Point[]): number {
   return minDist;
 }
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const lat = searchParams.get('lat');
-  const long = searchParams.get('long');
 
-  if (!lat || !long) {
-    return addCorsHeaders(NextResponse.json({ error: 'Missing coordinates' }, { status: 400 }));
-  }
-
+export async function getLocationData(lat: string, long: string): Promise<PlacesResponse> {
   try {
-    // Get core location data
-    const coreData = await getLocationData(lat, long);
+    // Validate coordinates
+    const latNum = parseFloat(lat);
+    const longNum = parseFloat(long);
+    if (isNaN(latNum) || isNaN(longNum) || latNum < -90 || latNum > 90 || longNum < -180 || longNum > 180) {
+      throw new Error('Invalid coordinates');
+    }
 
-    // Fetch polygons for nearby calculations
+    const point: Point = { lat: latNum, long: longNum };
+
+    // Fetch polygons from Prisma
     const rawPolygons = await prisma.geoPolygon.findMany();
     const polygons: GeoPolygon[] = rawPolygons.map((p) => ({
       id: p.id,
@@ -97,6 +89,7 @@ export async function GET(req: NextRequest) {
         : null,
     }));
 
+    // Format polygons
     const formattedPolygons = polygons
       .filter((p): p is GeoPolygon & { geometry: NonNullable<GeoPolygon['geometry']> } => {
         if (!p.geometry || p.geometry.type !== 'Polygon' || !Array.isArray(p.geometry.coordinates)) {
@@ -115,9 +108,26 @@ export async function GET(req: NextRequest) {
         })),
       }));
 
-    const latNum = parseFloat(lat);
-    const longNum = parseFloat(long);
-    const point: Point = { lat: latNum, long: longNum };
+    // Point-in-polygon check
+    function pointInPolygon(point: Point, polygon: Point[]): boolean {
+      let inside = false;
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].lat;
+        const yi = polygon[i].long;
+        const xj = polygon[j].lat;
+        const yj = polygon[j].long;
+
+        const intersect =
+          yi > point.long !== yj > point.long &&
+          point.lat < (xj - xi) * (point.long - yi) / (yj - yi + 0.0000001) + xi;
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    const matchedPolygons = formattedPolygons.filter((polygon) => pointInPolygon(point, polygon.points));
+
+
 
     // Nearby polygons
     const nearbyPolygons200 = formattedPolygons.filter((polygon) => {
@@ -130,27 +140,33 @@ export async function GET(req: NextRequest) {
       return dist > 200 && dist <= 500 && (polygon.polType === 'bldg' || polygon.polType === 'lot');
     });
 
-    // Sort polygons
-    const sortByPolType = (polygons: { polType: string; name: string }[]) =>
-      polygons.sort((a, b) => getPolTypeIndex(a.polType) - getPolTypeIndex(b.polType));
 
-    const responseLoc: LocationResponse = {
-      current: coreData.current,
-      nearby200: sortByPolType(nearbyPolygons200.map((p) => ({ polType: p.polType, name: p.name }))),
-      nearby500: sortByPolType(nearbyPolygons500.map((p) => ({ polType: p.polType, name: p.name }))),
-    };
 
-    const response = NextResponse.json(responseLoc, { status: 200 });
-    return addCorsHeaders(response);
-    
+
+
+
+
+    // Sort by polType
+    const current = matchedPolygons
+      .map((p) => ({
+        polType: p.polType,
+        name: p.name,
+      }))
+      .sort((a, b) => getPolTypeIndex(a.polType) - getPolTypeIndex(b.polType));
+
+    // If you want to return only the matched polygons as per PlacesResponse
+
+    const final = {current: current, nearby200:nearbyPolygons200, nearby500:nearbyPolygons500}
+
+    return ( final );
+
+
+
+
+
   } catch (error) {
-    console.error('Error processing request:', error);
-    return addCorsHeaders(
-      NextResponse.json(
-        { error: 'Server error', details: error instanceof Error ? error.message : String(error) },
-        { status: 500 }
-      )
-    );
+    console.error('Error fetching location data:', error);
+    throw new Error('Failed to fetch location data');
   } finally {
     await prisma.$disconnect();
   }

@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
         data: {
         token, user: { id: user.id, email: user.email, 
         wname: user.wname, munId:user.municipality.id, provId: user.province.id,
-       lat:user.municipality.lat, long:user.municipality.long
+       lat:user.municipality.lat, long:user.municipality.long, zoom:user.municipality.zoom
       }
 
 
