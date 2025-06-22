@@ -91,6 +91,14 @@ export async function POST(request: Request) {
     const nearby200 = filtered200.length > 0 ? filtered200.map((item) => item.name).join(', ') : 'none';
 
 
+  const getMunIdFunction = await prisma.municipality.findMany({
+    where: {municipalityName: fcmTopic}
+  })
+
+
+ const getMunId = getMunIdFunction.length > 0 ? getMunIdFunction.map((item) => item.id).join(', ') : munId;
+
+ console.log("getMunId result",getMunId)
 
     // Save to database
     const savedData = await prisma.emergency.create({
@@ -103,7 +111,7 @@ export async function POST(request: Request) {
         munName,
         name,
         mobile,
-        munId,
+        munId: getMunId,
         provId,
         status: true,
         verified: false,
