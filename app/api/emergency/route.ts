@@ -3,9 +3,10 @@ import { NextResponse, NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-const VERIFY_TOKEN = "mySecretAlertifyToken2025"; // Define your verify token here
+const VERIFY_TOKEN = process.env.VERIFY_TOKEN; // Define your verify token here
 
 export async function POST(request: Request) {
+  
   const { searchParams } = new URL(request.url);
 
   try {

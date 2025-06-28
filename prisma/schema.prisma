@@ -142,8 +142,25 @@ model Mobuser {
   province   Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
   munId      String @db.ObjectId
   municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
-
+  drrcode DrrCode[]
   @@map("mobuser")
+
+}
+
+model DrrCode {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId 
+  drrcode   String @unique
+  selfie     String? 
+  codeStatus Boolean  @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  mobUserId    String? @db.ObjectId
+  mobuser     Mobuser?     @relation(fields: [mobUserId], references: [id], onDelete: Cascade)
+  provId     String @db.ObjectId
+  province   Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
+  munId      String @db.ObjectId
+  municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
+  @@map("drrcode")
 
 }
 
@@ -162,8 +179,12 @@ model Webuser {
   municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
 
   @@map("webuser")
-
 }
+
+
+
+
+
 
 model Province {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId 
@@ -181,7 +202,8 @@ model Province {
   emergency Emergency[]
   mobuser Mobuser[]
   webuser Webuser[]
-  polygon Polygon[]
+  polygon Polygon[]  
+  drrcode DrrCode[]
   @@map("province")
 
 }
@@ -208,6 +230,7 @@ model Municipality {
   mobuser Mobuser[]
   webuser Webuser[]
   polygon Polygon[]
+  drrcode DrrCode[]
   @@map("municipality")
 
 }

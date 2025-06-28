@@ -6,6 +6,7 @@ import Link from 'next/link';
 interface GeoPolygon {
   id: string;
   name: string;
+  polType:string;
   geometry: { type: string; coordinates: number[][][] };
   createdAt: string;
   updatedAt: string;
@@ -78,6 +79,7 @@ export default function Home() {
             <thead>
               <tr className="bg-gray-100">
                 <th className="border-b p-4 text-left text-gray-700 font-semibold">Name</th>
+                  <th className="border-b p-4 text-left text-gray-700 font-semibold">Type</th>
                 <th className="border-b p-4 text-left text-gray-700 font-semibold">Geometry (Points)</th>
                 <th className="border-b p-4 text-left text-gray-700 font-semibold">Created At</th>
                 <th className="border-b p-4 text-left text-gray-700 font-semibold">Updated At</th>
@@ -88,6 +90,7 @@ export default function Home() {
               {polygons.map((polygon) => (
                 <tr key={polygon.id} className="hover:bg-gray-50 transition">
                   <td className="border-b p-4">{polygon.name}</td>
+                   <td className="border-b p-4">{polygon.polType}</td>
                   <td className="border-b p-4">
                     {polygon.geometry.coordinates[0]?.length || 0} points
                   </td>

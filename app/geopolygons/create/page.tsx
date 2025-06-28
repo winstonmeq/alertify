@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 export default function CreatePolygon() {
   const [name, setName] = useState('');
+  const [polType, setPolType] = useState('');
   const [geometry, setGeometry] = useState('');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function CreatePolygon() {
       const res = await fetch('/api/geopolygons', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, geometry: geometryObj }),
+        body: JSON.stringify({ name, polType, geometry: geometryObj }),
       });
 
       if (!res.ok) throw new Error('Failed to create polygon');
@@ -49,6 +50,24 @@ export default function CreatePolygon() {
             required
             className="w-full p-2 border rounded"
           />
+        </div>
+        <div>
+          <label htmlFor="polType" className="block text-sm font-medium">
+            Polygon Type
+          </label>
+          <select
+            id="polType"
+            value={polType}
+            onChange={(e) => setPolType(e.target.value)}
+            className="w-full p-2 border rounded"
+          >
+            <option value="">Select a type</option>
+            <option value="bldg">Building</option>
+            <option value="lot">Lot</option>
+            <option value="road">Road</option>
+            <option value="bar">Barangay</option>
+            <option value="mun">Municipality</option>
+          </select>
         </div>
         <div>
           <label htmlFor="geometry" className="block text-sm font-medium">
