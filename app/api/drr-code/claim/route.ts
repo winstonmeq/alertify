@@ -32,14 +32,7 @@ export async function PUT(req: NextRequest) {
         codeStatus: true,
         selfie: selfie || existingCode.selfie, // Use existing selfie if not provided
       },
-      include: {
-        province: {
-          select: { id: true, provinceName: true },
-        },
-        municipality: {
-          select: { id: true, municipalityName: true },
-        },
-      },
+     
     });
 
     return NextResponse.json(updatedCode);

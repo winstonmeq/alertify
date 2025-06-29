@@ -43,7 +43,10 @@ export async function GET(req: NextRequest) {
         userId: true,
       },
     });
-    return NextResponse.json(provinces);
+    // Add CORS headers
+   return  NextResponse.json(provinces);
+
+    
   } catch (error) {
     console.error('Error fetching provinces:', error);
     return NextResponse.json({ error: 'Error fetching provinces' }, { status: 500 });

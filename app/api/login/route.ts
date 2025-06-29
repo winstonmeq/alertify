@@ -21,7 +21,11 @@ export async function POST(request: Request) {
     }
 
     const user = await prisma.mobuser.findUnique({
-      where: { mobile }, include: { municipality: true }
+      where: { mobile }, 
+      include: { 
+        municipality: true, 
+        drrcode: true 
+      }
     });
 
     if (!user) {
@@ -44,7 +48,9 @@ export async function POST(request: Request) {
           munId: user.munId,
           provId: user.provId,
           hotlineNumber: user.municipality.hotlineNumber,
-        munName: user.municipality.municipalityName,
+          munName: user.municipality.municipalityName,
+          drrcode: user.drrcode,
+
         },
         
         

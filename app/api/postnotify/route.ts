@@ -34,16 +34,15 @@ if (!admin.apps.length) {
 }
 
 
-async function sendFcmNotification(data: Emergency) {
-  const { name, emergency, } = data;
+async function sendFcmNotification(data: Emergency, finalTopic: string) {
+  const { name, emergency } = data;
   try {
     await admin.messaging().send({
-      
       notification: {
         title: "Incident Report!",
         body: `${name} reported a ${emergency} incident!.`,
       },
-      topic: "cotabatotoken2025",
+      topic: finalTopic,
     });
     console.log("FCM notification sent successfully");
   } catch (error) {
@@ -75,8 +74,7 @@ export async function POST(request: Request) {
     
 
     // Send FCM notification asynchronously
-    sendFcmNotification(savedData).catch(console.error);
-
+    sendFcmNotification(savedData, provId).catch(console.error);
     return NextResponse.json(
       { message: "Postnotify data saved successfully" },
       { status: 201 }
