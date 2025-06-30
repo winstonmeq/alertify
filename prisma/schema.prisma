@@ -145,6 +145,7 @@ model Mobuser {
   municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
 
   drrcode DrrCode[]
+ fcmmobile Fcmmobile[]
   @@map("mobuser")
 
 }
@@ -181,12 +182,34 @@ model Webuser {
   province   Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
   munId      String @db.ObjectId
   municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
-
+  fcmweb Fcmweb[]
   @@map("webuser")
 }
 
 
+model Fcmweb {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId 
+  fcmToken  String   @unique 
+  webUserId    String   @db.ObjectId
+  webuser      Webuser     @relation(fields: [webUserId], references: [id], onDelete: Cascade)  
+  munId    String @db.ObjectId
+  municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("fcmweb")
 
+}
+
+model Fcmmobile {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId 
+  fcmToken  String   @unique 
+  mobUserId    String   @db.ObjectId
+  mobuser      Mobuser     @relation(fields: [mobUserId], references: [id], onDelete: Cascade)  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("fcmmobile")
+
+}
 
 model Province {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId 
@@ -233,6 +256,7 @@ model Municipality {
   webuser Webuser[]
   polygon Polygon[]
   drrcode DrrCode[]
+  fcmweb Fcmweb[]
   @@map("municipality")
 
 }

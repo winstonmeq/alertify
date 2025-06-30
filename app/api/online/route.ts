@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import admin from 'firebase-admin';
 import { getLocationData, PlacesResponse } from '../places/utils';
 
+
 const prisma = new PrismaClient();
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
@@ -32,7 +33,7 @@ if (!admin.apps.length) {
   });
 }
 
-async function sendFcmNotification(data: Emergency, topicFilter: string) {
+async function sendFcmNotification(data: Emergency, fcmToken: string) {
   const { emergency, name } = data;
   try {
     await admin.messaging().send({
@@ -40,7 +41,7 @@ async function sendFcmNotification(data: Emergency, topicFilter: string) {
         title: 'Emergency Reported!',
         body: `${name} reported a ${emergency} incident!`,
       },
-      topic: topicFilter,
+      token: fcmToken,
     });
     return true;
   } catch (error) {
@@ -98,7 +99,7 @@ export async function POST(request: Request) {
 
  const getMunId = getMunIdFunction.length > 0 ? getMunIdFunction.map((item) => item.id).join(', ') : munId;
 
- console.log("getMunId result",getMunId)
+ console.log("getMunId result",getMunId, fcmTopic)
 
     // Save to database
     const savedData = await prisma.emergency.create({
@@ -119,13 +120,26 @@ export async function POST(request: Request) {
       },
     });
 
+    const getToken = await prisma.fcmweb.findMany({
+    where: {munId: getMunId}
+  })
+
+  console.log('getToken result:', getToken);
+
+    if (getToken.length === 0) {
+      console.warn('No FCM tokens found for the specified munId:', getMunId);
+      return NextResponse.json({ error: 'No FCM tokens found for the specified municipality' }, { status: 404 });
+    }
+
+
+
     // Send FCM notification
-    const notificationResult = await sendFcmNotification(savedData, fcmTopic);
+    const notificationResult = await sendFcmNotification(savedData, getToken[0]?.fcmToken || '');
     if (notificationResult instanceof Error) {
       console.warn('Notification failed but data saved:', notificationResult);
     }
 
-    console.log(locationIncident)
+    console.log('FCM notification sent successfully');
 
     return NextResponse.json({ message: 'Emergency data saved successfully' }, { status: 201 });
   } catch (error) {
