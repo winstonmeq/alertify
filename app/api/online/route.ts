@@ -133,13 +133,33 @@ export async function POST(request: Request) {
 
 
 
-    // Send FCM notification
-    const notificationResult = await sendFcmNotification(savedData, getToken[0]?.fcmToken || '');
-    if (notificationResult instanceof Error) {
-      console.warn('Notification failed but data saved:', notificationResult);
-    }
+    // // Send FCM notification
+    // const notificationResult = await sendFcmNotification(savedData, getToken[0]?.fcmToken || '');
+    // if (notificationResult instanceof Error) {
+    //   console.warn('Notification failed but data saved:', notificationResult);
+    // }
 
-    console.log('FCM notification sent successfully');
+    // console.log('FCM notification sent successfully');
+
+
+    // Send FCM notifications for all tokens
+const notificationResults = [];
+for (const token of getToken) {
+  if (token.fcmToken) {
+    const result = await sendFcmNotification(savedData, token.fcmToken);
+    if (result instanceof Error) {
+      console.warn(`Notification failed for token ${token.fcmToken}:`, result);
+      notificationResults.push({ token: token.fcmToken, status: 'failed', error: result.message });
+    } else {
+      console.log(`FCM notification sent successfully for token ${token.fcmToken}`);
+      notificationResults.push({ token: token.fcmToken, status: 'success' });
+    }
+  } else {
+    console.warn('Invalid or missing FCM token in record:', token);
+    notificationResults.push({ token: 'unknown', status: 'failed', error: 'Missing FCM token' });
+  }
+}
+
 
     return NextResponse.json({ message: 'Emergency data saved successfully' }, { status: 201 });
   } catch (error) {

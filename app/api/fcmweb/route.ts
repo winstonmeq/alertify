@@ -35,8 +35,7 @@ export async function POST(request: NextRequest) {
       create: {
         webUserId,
         fcmToken,
-        munId,
-        
+        munId,        
       },
     });
 
