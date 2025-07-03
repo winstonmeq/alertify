@@ -34,7 +34,7 @@ if (!admin.apps.length) {
 }
 
 
-async function sendFcmNotification(data: Emergency, finalTopic: string) {
+async function sendFcmNotification(data: Emergency, fcmMobileToken: string): Promise<void | Error> {
   const { name, emergency } = data;
   try {
     await admin.messaging().send({
@@ -42,11 +42,12 @@ async function sendFcmNotification(data: Emergency, finalTopic: string) {
         title: "Incident Report!",
         body: `${name} reported a ${emergency} incident!.`,
       },
-      topic: finalTopic,
+      token: fcmMobileToken,
     });
     console.log("FCM notification sent successfully");
   } catch (error) {
     console.error("Failed to send FCM notification:", error);
+    return error instanceof Error ? error : new Error(String(error));
   }
 }
 
@@ -72,13 +73,40 @@ export async function POST(request: Request) {
     });
 
     
+     const getToken = await prisma.fcmmobile.findMany({
+        where: {munId: munId},
+      })
+    
+      console.log('getToken result:', getToken);
+    
+        if (getToken.length === 0) {
+          console.warn('No FCM Mobile tokens found for the specified munId:', munId);
+          return NextResponse.json({ error: 'No FCM tokens found for the specified municipality' }, { status: 404 });
+        }
+    
 
-    // Send FCM notification asynchronously
-    sendFcmNotification(savedData, provId).catch(console.error);
+
+for (const token of getToken) {
+  if (token.fcmToken) {
+    const result = await sendFcmNotification(savedData, token.fcmToken);
+    if (result && result instanceof Error) {
+      console.warn(`Notification failed for token ${token.fcmToken}:`, result);
+    } else {
+      console.log(`FCM notification sent successfully for token ${token.fcmToken}`);
+    }
+  } else {
+    console.warn('Invalid or missing FCM token in record:', token);
+  }
+}
+
+
+
     return NextResponse.json(
       { message: "Postnotify data saved successfully" },
       { status: 201 }
     );
+
+    
   } catch (error) {
     console.error("Error during saving data:", error);
     return NextResponse.json({ message: "Failed to save data" }, { status: 500 });

@@ -133,15 +133,6 @@ export async function POST(request: Request) {
 
 
 
-    // // Send FCM notification
-    // const notificationResult = await sendFcmNotification(savedData, getToken[0]?.fcmToken || '');
-    // if (notificationResult instanceof Error) {
-    //   console.warn('Notification failed but data saved:', notificationResult);
-    // }
-
-    // console.log('FCM notification sent successfully');
-
-
     // Send FCM notifications for all tokens
 const notificationResults = [];
 for (const token of getToken) {

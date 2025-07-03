@@ -204,7 +204,12 @@ model Fcmmobile {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId 
   fcmToken  String   @unique 
   mobUserId    String   @db.ObjectId
-  mobuser      Mobuser     @relation(fields: [mobUserId], references: [id], onDelete: Cascade)  
+  mobuser      Mobuser     @relation(fields: [mobUserId], references: [id], onDelete: Cascade)
+  provId     String @db.ObjectId
+  province   Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
+  munId      String @db.ObjectId
+  municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
+    
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("fcmmobile")
@@ -229,6 +234,7 @@ model Province {
   webuser Webuser[]
   polygon Polygon[]  
   drrcode DrrCode[]
+  fcmmobile Fcmmobile[]
   @@map("province")
 
 }
@@ -257,6 +263,7 @@ model Municipality {
   polygon Polygon[]
   drrcode DrrCode[]
   fcmweb Fcmweb[]
+  fcmmobile Fcmmobile[]
   @@map("municipality")
 
 }
