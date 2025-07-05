@@ -74,7 +74,7 @@ export async function POST(request: Request) {
 
     
      const getToken = await prisma.fcmmobile.findMany({
-        where: {munId: munId},
+        where: {provId: provId},
       })
     
       console.log('getToken result:', getToken);
