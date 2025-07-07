@@ -1,6 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse, NextRequest } from "next/server";
 import admin from "firebase-admin";
+import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible'; // For rate limiting
+import asyncBatch from 'async-batch'; // For batch processing FCM notifications
+
+
+
 
 const prisma = new PrismaClient();
 const VERIFY_TOKEN = "mySecretAlertifyToken2025";
@@ -20,6 +25,13 @@ interface Emergency {
   photoURL: string;
   createdAt?: Date; // Optional, added by Prisma
 }
+
+
+// Rate limiter configuration
+const rateLimiter = new RateLimiterMemory({
+  points: 100, // Max 100 requests
+  duration: 60, // Per 60 seconds per IP
+});
 
 
 
@@ -51,15 +63,27 @@ async function sendFcmNotification(data: Emergency, fcmMobileToken: string): Pro
   }
 }
 
+
 export async function POST(request: Request) {
+
+    const clientIp = request.headers.get('x-forwarded-for') || 'unknown';
+
+
+
+  try {
+
+    await rateLimiter.consume(clientIp);
+
+    
   const { searchParams } = new URL(request.url);
   const token = searchParams.get("token");
+
 
   if (token !== VERIFY_TOKEN) {
     return new NextResponse("Verification failed", { status: 403 });
   }
-
-  try {
+  
+    
     const requestBody = await request.json();
     const { emergency, lat, long, barangay,munName, name, mobile, photoURL, situation, munId, provId } =
       requestBody;
@@ -68,37 +92,41 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+
+    
     const savedData = await prisma.postnotify.create({
       data: { emergency, lat, long, barangay, munName, name, mobile, verified: true, photoURL, situation, munId, provId }
     });
 
     
-     const getToken = await prisma.fcmmobile.findMany({
-        where: {provId: provId},
-      })
+    console.log('this is provId', provId);
+
+      // Fetch FCM tokens
+    const fcmTokens = await prisma.fcmmobile.findMany({
+      where: { provId: provId }, // Filter by provId
+      select: { fcmToken: true }, // Select only fcmToken to reduce data transfer
+    });
     
-      console.log('getToken result:', getToken);
+      console.log('getToken result:', fcmTokens);
     
-        if (getToken.length === 0) {
-          console.warn('No FCM Mobile tokens found for the specified munId:', munId);
+        if (fcmTokens.length === 0) {
+          console.warn('No FCM Mobile tokens found for the specified provId:', provId);
           return NextResponse.json({ error: 'No FCM tokens found for the specified municipality' }, { status: 404 });
         }
     
 
-
-for (const token of getToken) {
-  if (token.fcmToken) {
-    const result = await sendFcmNotification(savedData, token.fcmToken);
-    if (result && result instanceof Error) {
-      console.warn(`Notification failed for token ${token.fcmToken}:`, result);
-    } else {
-      console.log(`FCM notification sent successfully for token ${token.fcmToken}`);
-    }
-  } else {
-    console.warn('Invalid or missing FCM token in record:', token);
-  }
-}
-
+        // Batch process FCM notifications
+    await asyncBatch(
+      fcmTokens.filter(token => token.fcmToken), // Filter out invalid tokens
+      async (token) => {
+        try {
+          await sendFcmNotification(savedData, token.fcmToken);
+        } catch (error) {
+          console.warn('FCM notification failed', { fcmToken: token.fcmToken, error });
+        }
+      },
+      10 // Process 10 notifications concurrently
+    );
 
 
     return NextResponse.json(
@@ -109,9 +137,18 @@ for (const token of getToken) {
     
   } catch (error) {
     console.error("Error during saving data:", error);
-    return NextResponse.json({ message: "Failed to save data" }, { status: 500 });
+    // return NextResponse.json({ message: "Failed to save data" }, { status: 500 });
+
+    if (error instanceof RateLimiterRes) {
+      console.warn('Rate limit exceeded', { clientIp });
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
+
+    console.warn('Error processing request', { error, clientIp });
+    return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
+
   } finally {
-    await prisma.$disconnect();
+
   }
 }
 
