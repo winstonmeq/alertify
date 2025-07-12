@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
 
     return addCorsHeaders(response);
   } catch (error) {
-    // console.error('Error in POST /api/webuser:', error);
+    console.error('Error in POST /api/webuser:', error);
     const response = NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
