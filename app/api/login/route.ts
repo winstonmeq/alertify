@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     const user = await prisma.mobuser.findUnique({
-      where: { mobile }, 
+      where: { mobile: mobile }, 
       include: { 
         municipality: true, 
         drrcode: true 

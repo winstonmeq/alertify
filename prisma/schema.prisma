@@ -133,19 +133,18 @@ model Mobuser {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId 
   firstname  String
   lastname   String
+  image      String?
   barangay   String
   mobile     String @unique
   password   String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-
   provId     String @db.ObjectId
   province   Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
   munId      String @db.ObjectId
   municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
-
   drrcode DrrCode[]
- fcmmobile Fcmmobile[]
+  fcmmobile Fcmmobile[]
   @@map("mobuser")
 
 }
