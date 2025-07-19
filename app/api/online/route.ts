@@ -60,6 +60,9 @@ export async function POST(request: Request) {
 
   try {
     const requestBody = await request.json();
+
+    console.log('Request body:', requestBody);
+
     const { emergency, lat, long, barangay, munName, name, mobile, munId, provId, photoURL } = requestBody;
 
     if (!emergency || !lat || !long || !barangay || !name || !mobile) {
@@ -81,25 +84,23 @@ export async function POST(request: Request) {
 
     const locationIncident = filtered.length > 0 ? filtered.map((item) => item.name).join(', ') : 'Unknown Location';
 
-    const topicFilter = externalData.current?.filter((item) => item.polType === 'mun') || [];
+    // const fcmTopic = filtered.length > 0 ? filtered.map((item) => item.name).join(', ') : 'default_topic';
 
-    const fcmTopic = topicFilter.length > 0 ? topicFilter.map((item) => item.name).join(', ') : 'default_topic';
-
-    console.log('LocIncident:', locationIncident, 'FCM Topic:', fcmTopic);
+    console.log('LocationIncident:', locationIncident);
 
     //process to get nearby200
     const filtered200 = externalData.nearby200?.filter((item) => item.polType === 'lot' || item.polType === 'bldg') || [];
     const nearby200 = filtered200.length > 0 ? filtered200.map((item) => item.name).join(', ') : 'none';
 
 
-  const getMunIdFunction = await prisma.municipality.findMany({
-    where: {municipalityName: fcmTopic}
-  })
+  // const getMunIdFunction = await prisma.municipality.findMany({
+  //   where: {municipalityName: fcmTopic}
+  // })
 
 
- const getMunId = getMunIdFunction.length > 0 ? getMunIdFunction.map((item) => item.id).join(', ') : munId;
+//  const getMunId = getMunIdFunction.length > 0 ? getMunIdFunction.map((item) => item.id).join(', ') : munId;
 
- console.log("getMunId result",getMunId, fcmTopic)
+//  console.log("getMunId result",getMunId, fcmTopic)
 
     // Save to database
     const savedData = await prisma.emergency.create({
@@ -112,7 +113,7 @@ export async function POST(request: Request) {
         munName,
         name,
         mobile,
-        munId: getMunId,
+        munId,
         provId,
         status: true,
         verified: false,
@@ -120,14 +121,16 @@ export async function POST(request: Request) {
       },
     });
 
+
+
     const getToken = await prisma.fcmweb.findMany({
-    where: {munId: getMunId}
+    where: {munId: munId}
   })
 
   console.log('getToken result:', getToken);
 
     if (getToken.length === 0) {
-      console.warn('No FCM tokens found for the specified munId:', getMunId);
+      console.warn('No FCM tokens found for the specified munId:', munId);
       return NextResponse.json({ error: 'No FCM tokens found for the specified municipality' }, { status: 404 });
     }
 
@@ -160,6 +163,6 @@ for (const token of getToken) {
 }
 
 // Clean up Prisma on server shutdown
-process.on('SIGTERM', async () => {
-  await prisma.$disconnect();
-});
+// process.on('SIGTERM', async () => {
+//   await prisma.$disconnect();
+// });
