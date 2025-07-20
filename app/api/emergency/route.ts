@@ -18,6 +18,7 @@ export async function POST(request: Request) {
 
       // Extract fields from the JSON body
       const {
+        mobUserId,
         emergency,
         lat,
         long,
@@ -52,6 +53,7 @@ export async function POST(request: Request) {
       // Save data to the database using Prisma
       await prisma.emergency.create({
         data: {
+          mobUserId,
           emergency,
           lat,
           long,

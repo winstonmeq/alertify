@@ -25,7 +25,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   try {
     const emergency = await prisma.emergency.findUnique({
-      where: { id },
+      where: { id:id },
     });
     if (!emergency) {
       return NextResponse.json({ error: 'Emergency not found' }, { status: 404 });

@@ -20,6 +20,7 @@ interface Emergency {
   munName: string;
   name: string;
   mobile: string;
+  mobUserId: string; // Assuming this is a string based on your schema
   munId: string;
   provId: string;
   photoURL: string;
@@ -85,8 +86,7 @@ export async function POST(request: Request) {
   
     
     const requestBody = await request.json();
-    const { emergency, lat, long, barangay,munName, name, mobile, photoURL, situation, munId, provId } =
-      requestBody;
+    const { emergency, lat, long, barangay,munName, name, mobile, photoURL, situation, mobUserId, munId, provId } =  requestBody;
 
     if (!emergency || !lat || !long || !barangay || !name || !mobile) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
 
     
     const savedData = await prisma.postnotify.create({
-      data: { emergency, lat, long, barangay, munName, name, mobile, verified: true, photoURL, situation, munId, provId }
+      data: { emergency, lat, long, barangay, munName, name, mobile, verified: true, photoURL, situation, mobUserId, munId, provId }
     });
 
     

@@ -97,6 +97,8 @@ model Emergency {
   verified  Boolean  @default(false)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+ mobUserId   String @db.ObjectId
+ mobuser  Mobuser     @relation(fields: [mobUserId], references: [id], onDelete: Cascade)
   munId    String @db.ObjectId
  municipality Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
  provId    String @db.ObjectId
@@ -120,6 +122,8 @@ model Postnotify {
   photoURL  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+   mobUserId   String @db.ObjectId
+ mobuser  Mobuser     @relation(fields: [mobUserId], references: [id], onDelete: Cascade)
   provId    String @db.ObjectId
   province  Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
   munId    String @db.ObjectId
@@ -133,7 +137,6 @@ model Mobuser {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId 
   firstname  String
   lastname   String
-  image      String?
   barangay   String
   mobile     String @unique
   password   String
@@ -145,6 +148,8 @@ model Mobuser {
   municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
   drrcode DrrCode[]
   fcmmobile Fcmmobile[]
+  emergency Emergency[]
+  postnotify Postnotify[]
   @@map("mobuser")
 
 }
@@ -268,22 +273,6 @@ model Municipality {
 }
 
 
-model Messenger {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId 
-  emergency_m String
-  lat_m       String
-  long_m      String
-  mobile_m    String
-  purok_m     String
-  barangay_m  String
-  name_m      String
-  position_m  String
- createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-
-  @@map("messenger")
-
-}
 
 model Polygon { 
   id String   @id @default(auto()) @map("_id") @db.ObjectId 
