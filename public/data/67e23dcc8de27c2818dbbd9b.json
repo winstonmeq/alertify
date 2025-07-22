@@ -135,8 +135,24 @@
                                 7.113239494818497
                             ]
                         ]
-                    ],
-                    [
+                    ]                   
+      ]
+      }
+    },
+
+
+     {
+      "type": "Feature",
+      "properties": {
+        "provId": "687f788a0a193d8c3d2f40bb",
+        "munId": "687f79370a193d8c3d2f40c2",
+        "municipality": "President Roxas",
+        "hotline": "09517894388"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+                   [
                         [
                             [
                                 125.063651206680802,
@@ -240,6 +256,8 @@
       ]
       }
     },
+
+
 
 
 
