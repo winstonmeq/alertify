@@ -34,6 +34,7 @@ if (!admin.apps.length) {
 }
 
 async function sendFcmNotification(data: Emergency, tokens: string[]) {
+
   const { emergency, name } = data;
   if (tokens.length === 0) return [];
   try {
@@ -57,7 +58,12 @@ async function sendFcmNotification(data: Emergency, tokens: string[]) {
       error: error instanceof Error ? error.message : String(error),
     }));
   }
+
 }
+
+
+
+
 
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -109,6 +115,10 @@ export async function POST(request: Request) {
       },
     });
 
+
+
+
+
     // Retrieve FCM tokens
     const getToken = await prisma.fcmweb.findMany({
       where: { munId },
@@ -119,6 +129,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Emergency data saved, no notifications sent' }, { status: 201 });
     }
 
+
+
+    //bago nga config para mag handle large number of tokens
     // Send FCM notifications using multicast
     const tokens = getToken.filter((t) => t.fcmToken).map((t) => t.fcmToken);
     if (tokens.length > 0) {
@@ -139,9 +152,13 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ message: 'Emergency data saved successfully' }, { status: 201 });
+
+
   } catch (error) {
+
     console.error('Error during processing:', error);
     return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });
+    
   }
 }
 
