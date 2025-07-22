@@ -9,7 +9,6 @@ export const auth = betterAuth({
       provider: "mongodb"
     }),
 
-
     emailAndPassword: {
       enabled: true,
       autoSignIn: true 
