@@ -20,10 +20,10 @@ interface Emergency {
   munName: string;
   name: string;
   mobile: string;
-  mobUserId: string; // Assuming this is a string based on your schema
   munId: string;
   provId: string;
   photoURL: string;
+  mobUserId: string; // Assuming this is a string based on your schema
   createdAt?: Date; // Optional, added by Prisma
 }
 
@@ -45,6 +45,8 @@ if (!admin.apps.length) {
     }),
   });
 }
+
+
 
 
 async function sendFcmNotification(data: Emergency, fcmMobileToken: string): Promise<void | Error> {
@@ -95,7 +97,7 @@ export async function POST(request: Request) {
 
     
     const savedData = await prisma.postnotify.create({
-      data: { emergency, lat, long, barangay, munName, name, mobile, verified: true, photoURL, situation, mobUserId, munId, provId }
+      data: { emergency, lat, long, barangay, munName, name, mobile, verified: true, photoURL, situation, munId, provId,  mobUserId }
     });
 
     
