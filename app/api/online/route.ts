@@ -33,6 +33,8 @@ if (!admin.apps.length) {
   });
 }
 
+
+//code optimize to handle large number of tokens
 async function sendFcmNotification(data: Emergency, tokens: string[]) {
 
   const { emergency, name } = data;
@@ -64,7 +66,7 @@ async function sendFcmNotification(data: Emergency, tokens: string[]) {
 
 
 
-
+// Main POST handler for emergency reports
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const token = searchParams.get('token');
@@ -81,7 +83,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Get location data
+    //get location data from external service it is assumed that getLocationData is defined in places/utils.ts
     let externalData: PlacesResponse;
     try {
       externalData = await getLocationData(lat, long);
@@ -90,6 +92,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Failed to validate coordinates' }, { status: 400 });
     }
 
+
+    //filter and format location data
     const filtered = externalData.current?.filter((item) => item.polType !== 'mun') || [];
     const locationIncident = filtered.length > 0 ? filtered.map((item) => item.name).join(', ') : 'Unknown Location';
     const filtered200 = externalData.nearby200?.filter((item) => item.polType === 'lot' || item.polType === 'bldg') || [];
@@ -124,6 +128,8 @@ export async function POST(request: Request) {
       where: { munId },
     });
 
+  
+    // If no tokens found, log and return early
     if (getToken.length === 0) {
       console.warn('No FCM tokens found for munId:', munId);
       return NextResponse.json({ message: 'Emergency data saved, no notifications sent' }, { status: 201 });
@@ -141,6 +147,7 @@ export async function POST(request: Request) {
         tokenChunks.push(tokens.slice(i, i + chunkSize));
       }
 
+      // Send notifications in chunks
       const notificationPromises = tokenChunks.map((chunk) => sendFcmNotification(savedData, chunk));
       const notificationResults = await Promise.all(notificationPromises);
       const flattenedResults = notificationResults.flat();
