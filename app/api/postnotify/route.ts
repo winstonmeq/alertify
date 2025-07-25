@@ -105,7 +105,7 @@ export async function POST(request: Request) {
 
       // Fetch FCM tokens
     const fcmTokens = await prisma.fcmmobile.findMany({
-      where: { provId: provId }, // Filter by provId
+      where: { provId: provId, isActive: true }, // Filter by provId
       select: { fcmToken: true }, // Select only fcmToken to reduce data transfer
     });
     

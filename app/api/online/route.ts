@@ -125,7 +125,8 @@ export async function POST(request: Request) {
 
     // Retrieve FCM tokens
     const getToken = await prisma.fcmweb.findMany({
-      where: { munId },
+      where: { munId},
+      select: { fcmToken: true },
     });
 
   
