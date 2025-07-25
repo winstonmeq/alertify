@@ -22,23 +22,24 @@ export async function POST(request: NextRequest) {
    
     const { fcmToken, mobUserId, munId, provId } = await request.json();
     
-    if (!fcmToken) {
-      return NextResponse.json({ error: 'FCM token is required' }, { status: 400 });
-    }
+   if (!fcmToken || !mobUserId || !munId || !provId) {
+  return NextResponse.json({ error: 'All fields (fcmToken, mobUserId, munId, provId) are required' }, { status: 400 });
+}
 
- 
-    // Upsert device to avoid duplicate tokens
-    const fcmDataMobile = await prisma.fcmmobile.upsert({
-      where: { fcmToken },
-      update: {mobUserId, munId,provId, updatedAt: new Date() },
-      create: {
-        mobUserId,
-        fcmToken,
-        munId, 
-        provId       
-      },
+// Deactivate old tokens for the same mobUserId
+    await prisma.fcmmobile.updateMany({
+      where: { mobUserId, fcmToken: { not: fcmToken } },
+      data: { isActive: false },
     });
 
+    // Upsert new token
+    const fcmDataMobile = await prisma.fcmmobile.upsert({
+      where: { fcmToken },
+      update: { mobUserId, munId, provId, isActive: true, updatedAt: new Date() },
+      create: { mobUserId, fcmToken, munId, provId, isActive: true },
+    });
+ 
+   
     
     console.log('FCM Mobile token saved:', fcmDataMobile);
 

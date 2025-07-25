@@ -206,7 +206,8 @@ model Fcmweb {
 
 model Fcmmobile {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId 
-  fcmToken  String   @unique 
+  fcmToken  String   @unique
+  isActive  Boolean  @default(true) 
   mobUserId    String   @db.ObjectId
   mobuser      Mobuser     @relation(fields: [mobUserId], references: [id], onDelete: Cascade)
   provId     String @db.ObjectId
