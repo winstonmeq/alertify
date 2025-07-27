@@ -109,7 +109,7 @@ model Emergency {
 }
 
 model Postnotify {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId 
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId 
   emergency String
   lat       String
   long      String
@@ -122,8 +122,8 @@ model Postnotify {
   photoURL  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-   mobUserId   String @db.ObjectId
- mobuser  Mobuser     @relation(fields: [mobUserId], references: [id], onDelete: Cascade)
+  webUserId String @db.ObjectId
+  webuser   Webuser     @relation(fields: [webUserId], references: [id], onDelete: Cascade)
   provId    String @db.ObjectId
   province  Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
   munId    String @db.ObjectId
@@ -149,7 +149,6 @@ model Mobuser {
   drrcode DrrCode[]
   fcmmobile Fcmmobile[]
   emergency Emergency[]
-  postnotify Postnotify[]
   @@map("mobuser")
 
 }
@@ -187,6 +186,8 @@ model Webuser {
   munId      String @db.ObjectId
   municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
   fcmweb Fcmweb[]
+  postnotify Postnotify[]
+
   @@map("webuser")
 }
 
