@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import bcrypt from "bcrypt"; // ✅ Import bcrypt
 
 const prisma = new PrismaClient();
 const VERIFY_TOKEN = "mySecretAlertifyToken2025";
@@ -21,18 +22,21 @@ export async function POST(request: Request) {
     }
 
     const user = await prisma.mobuser.findUnique({
-      where: { mobile: mobile }, 
-      include: { 
-        municipality: true, 
-        drrcode: true 
-      }
+      where: { mobile },
+      include: {
+        municipality: true,
+        drrcode: true,
+      },
     });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    if (user.password !== password) {
+    // ✅ Compare the password with hashed version
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
@@ -50,10 +54,7 @@ export async function POST(request: Request) {
           hotlineNumber: user.municipality.hotlineNumber,
           munName: user.municipality.municipalityName,
           drrcode: user.drrcode,
-
         },
-        
-        
       },
       { status: 200 }
     );

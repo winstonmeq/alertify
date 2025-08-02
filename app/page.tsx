@@ -17,6 +17,8 @@ export default function Home() {
   }, []);
 
   const handleSignOut = async () => {
+
+    
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {

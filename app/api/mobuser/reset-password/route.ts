@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import bcrypt from "bcrypt"; // ✅ Import bcrypt
 
 const prisma = new PrismaClient();
 const VERIFY_TOKEN = "mySecretAlertifyToken2025";
@@ -22,17 +23,19 @@ export async function POST(request: Request) {
 
     // Find the user by mobile number
     const user = await prisma.mobuser.findFirst({
-      where: { mobile: mobile },
+      where: { mobile },
     });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Update the user's password
+    // ✅ Hash the new password before updating
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
     const updatedUser = await prisma.mobuser.update({
       where: { id: user.id },
-      data: { password: newPassword },
+      data: { password: hashedPassword },
     });
 
     if (!updatedUser) {
