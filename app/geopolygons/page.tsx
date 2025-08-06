@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
 
 interface GeoPolygon {
   id: string;
   name: string;
-  polType:string;
+  polType: string;
   geometry: { type: string; coordinates: number[][][] };
   createdAt: string;
   updatedAt: string;
@@ -16,8 +18,26 @@ export default function Home() {
   const [polygons, setPolygons] = useState<GeoPolygon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { data: session, isPending: isAuthPending, error: authError, refetch } = authClient.useSession();
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
 
+  // Ensure client-side rendering
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Redirect to sign-in if unauthenticated
+  useEffect(() => {
+    if (isMounted && !isAuthPending && !session) {
+      router.replace('/sign-in'); // Use replace instead of push to avoid adding to history
+    }
+  }, [isMounted, isAuthPending, session, router]);
+
+  // Fetch polygons only if authenticated
+  useEffect(() => {
+    if (!isMounted || isAuthPending || !session) return;
+
     async function fetchPolygons() {
       try {
         const res = await fetch('/api/geopolygons', {
@@ -36,7 +56,7 @@ export default function Home() {
       }
     }
     fetchPolygons();
-  }, []);
+  }, [isMounted, isAuthPending, session]);
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Are you sure you want to delete the polygon "${name}"?`)) return;
@@ -54,6 +74,34 @@ export default function Home() {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
     }
   };
+
+  // Return loading state until authentication is resolved
+  if (!isMounted || isAuthPending) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-white">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  // Return nothing or redirect if no session
+  if (!session) {
+    return null; // Prevent rendering anything before redirect
+  }
+
+  if (authError) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-white">
+        <p className="text-red-500">Error: {authError.message}</p>
+        <button
+          className="px-4 py-2 mt-5 rounded-sm border-1px border-solid bg-blue-700 text-white font-bold"
+          onClick={() => refetch()}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -79,7 +127,7 @@ export default function Home() {
             <thead>
               <tr className="bg-gray-100">
                 <th className="border-b p-4 text-left text-gray-700 font-semibold">Name</th>
-                  <th className="border-b p-4 text-left text-gray-700 font-semibold">Type</th>
+                <th className="border-b p-4 text-left text-gray-700 font-semibold">Type</th>
                 <th className="border-b p-4 text-left text-gray-700 font-semibold">Geometry (Points)</th>
                 <th className="border-b p-4 text-left text-gray-700 font-semibold">Created At</th>
                 <th className="border-b p-4 text-left text-gray-700 font-semibold">Updated At</th>
@@ -90,7 +138,7 @@ export default function Home() {
               {polygons.map((polygon) => (
                 <tr key={polygon.id} className="hover:bg-gray-50 transition">
                   <td className="border-b p-4">{polygon.name}</td>
-                   <td className="border-b p-4">{polygon.polType}</td>
+                  <td className="border-b p-4">{polygon.polType}</td>
                   <td className="border-b p-4">
                     {polygon.geometry.coordinates[0]?.length || 0} points
                   </td>
