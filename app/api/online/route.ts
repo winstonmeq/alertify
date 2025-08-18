@@ -45,6 +45,16 @@ async function sendFcmNotification(data: Emergency, tokens: string[]) {
         title: 'Emergency Reported!',
         body: `${name} reported a ${emergency} incident!`,
       },
+     android: {
+        notification: {
+          sound: 'alarm', // Custom sound for Android
+          channelId: 'emergency_channel', // Match the channel ID in Flutter app
+        },
+      },
+      data: {
+        title: 'Emergency Reported!',
+        body: `${name} reported a ${emergency} incident!`,
+      },
       tokens,
     });
     return response.responses.map((res, i) => ({
