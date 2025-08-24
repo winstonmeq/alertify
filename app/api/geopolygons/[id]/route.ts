@@ -30,7 +30,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
 
   try {
-    const { name, polType, geometry } = await req.json();
+    const { name, provId, munId, polType, geometry } = await req.json();
     
     // Validate input
     if (!name || !geometry || geometry.type !== 'Polygon' || !geometry.coordinates) {
@@ -41,6 +41,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       where: { id },
       data: {
         name,
+        provId,
+        munId,
         polType,
         geometry,
       },

@@ -1,9 +1,7 @@
-// app/api/online/route.ts
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import admin from 'firebase-admin';
 import { getLocationData, PlacesResponse } from '../places/utils';
-
 
 const prisma = new PrismaClient();
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
@@ -24,33 +22,51 @@ interface Emergency {
   createdAt?: Date;
 }
 
-// if (!admin.apps.length) {
-//   admin.initializeApp({
-//     credential: admin.credential.cert({
-//       projectId: process.env.FIREBASE_PROJECT_ID,
-//       privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-//       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-//     }),
-//   });
-// }
+//Initialize Firebase Admin (uncomment if needed)
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    }),
+  });
+}
 
-async function sendFcmNotification(data: Emergency, fcmToken: string) {
+
+//code optimize to handle large number of tokens
+async function sendFcmNotification(data: Emergency, tokens: string[]) {
+
   const { emergency, name } = data;
+  if (tokens.length === 0) return [];
   try {
-    await admin.messaging().send({
+    const response = await admin.messaging().sendEachForMulticast({
       notification: {
         title: 'Emergency Reported!',
         body: `${name} reported a ${emergency} incident!`,
       },
-      token: fcmToken,
+      tokens,
     });
-    return true;
+    return response.responses.map((res, i) => ({
+      token: tokens[i],
+      status: res.success ? 'success' : 'failed',
+      error: res.error?.message,
+    }));
   } catch (error) {
-    console.error('Failed to send FCM notification:', error);
-    return error;
+    console.error('Failed to send FCM notifications:', error);
+    return tokens.map((token) => ({
+      token,
+      status: 'failed',
+      error: error instanceof Error ? error.message : String(error),
+    }));
   }
+
 }
 
+
+
+
+// Main POST handler for emergency reports
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const token = searchParams.get('token');
@@ -61,16 +77,13 @@ export async function POST(request: Request) {
 
   try {
     const requestBody = await request.json();
-
-    console.log('Request body:', requestBody);
-
     const { emergency, lat, mobUserId, long, barangay, munName, name, mobile, munId, provId, photoURL } = requestBody;
 
     if (!emergency || !lat || !long || !barangay || !name || !mobile) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Get location data
+    //get location data from external service it is assumed that getLocationData is defined in places/utils.ts
     let externalData: PlacesResponse;
     try {
       externalData = await getLocationData(lat, long);
@@ -79,29 +92,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Failed to validate coordinates' }, { status: 400 });
     }
 
-    // Process location data
 
+    //filter and format location data
     const filtered = externalData.current?.filter((item) => item.polType !== 'mun') || [];
-
     const locationIncident = filtered.length > 0 ? filtered.map((item) => item.name).join(', ') : 'Unknown Location';
-
-    // const fcmTopic = filtered.length > 0 ? filtered.map((item) => item.name).join(', ') : 'default_topic';
-
-    console.log('LocationIncident:', locationIncident);
-
-    //process to get nearby200
     const filtered200 = externalData.nearby200?.filter((item) => item.polType === 'lot' || item.polType === 'bldg') || [];
     const nearby200 = filtered200.length > 0 ? filtered200.map((item) => item.name).join(', ') : 'none';
-
-
-  // const getMunIdFunction = await prisma.municipality.findMany({
-  //   where: {municipalityName: fcmTopic}
-  // })
-
-
-//  const getMunId = getMunIdFunction.length > 0 ? getMunIdFunction.map((item) => item.id).join(', ') : munId;
-
-//  console.log("getMunId result",getMunId, fcmTopic)
 
     // Save to database
     const savedData = await prisma.emergency.create({
@@ -111,7 +107,7 @@ export async function POST(request: Request) {
         lat,
         long,
         barangay: locationIncident,
-        nearby200: nearby200,
+        nearby200,
         munName,
         name,
         mobile,
@@ -125,46 +121,56 @@ export async function POST(request: Request) {
 
 
 
+
+
+    // Retrieve FCM tokens
     const getToken = await prisma.fcmweb.findMany({
-    where: {munId: munId}
-  })
+      where: { munId},
+      select: { fcmToken: true },
+    });
 
-  console.log('getToken result:', getToken);
-
+  
+    // If no tokens found, log and return early
     if (getToken.length === 0) {
-      console.warn('No FCM tokens found for the specified munId:', munId);
-      return NextResponse.json({ error: 'No FCM tokens found for the specified municipality' }, { status: 404 });
+      console.warn('No FCM tokens found for munId:', munId);
+      return NextResponse.json({ message: 'Emergency data saved, no notifications sent' }, { status: 201 });
     }
 
 
 
-    // Send FCM notifications for all tokens
-const notificationResults = [];
-for (const token of getToken) {
-  if (token.fcmToken) {
-    const result = await sendFcmNotification(savedData, token.fcmToken);
-    if (result instanceof Error) {
-      console.warn(`Notification failed for token ${token.fcmToken}:`, result);
-      notificationResults.push({ token: token.fcmToken, status: 'failed', error: result.message });
-    } else {
-      console.log(`FCM notification sent successfully for token ${token.fcmToken}`);
-      notificationResults.push({ token: token.fcmToken, status: 'success' });
-    }
-  } else {
-    console.warn('Invalid or missing FCM token in record:', token);
-    notificationResults.push({ token: 'unknown', status: 'failed', error: 'Missing FCM token' });
-  }
-}
+    //bago nga config para mag handle large number of tokens
+    // Send FCM notifications using multicast
+    const tokens = getToken.filter((t) => t.fcmToken).map((t) => t.fcmToken);
+    if (tokens.length > 0) {
+      const chunkSize = 500; // Firebase multicast limit
+      const tokenChunks = [];
+      for (let i = 0; i < tokens.length; i += chunkSize) {
+        tokenChunks.push(tokens.slice(i, i + chunkSize));
+      }
 
+      // Send notifications in chunks
+      const notificationPromises = tokenChunks.map((chunk) => sendFcmNotification(savedData, chunk));
+      const notificationResults = await Promise.all(notificationPromises);
+      const flattenedResults = notificationResults.flat();
+
+      const failedCount = flattenedResults.filter((r) => r.status === 'failed').length;
+      if (failedCount > 0) {
+        console.warn(`${failedCount} FCM notifications failed for munId: ${munId}`);
+      }
+    }
 
     return NextResponse.json({ message: 'Emergency data saved successfully' }, { status: 201 });
+
+
   } catch (error) {
-    console.error('Error during saving data:', error);
-    return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
+
+    console.error('Error during processing:', error);
+    return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });
+    
   }
 }
 
 // Clean up Prisma on server shutdown
-// process.on('SIGTERM', async () => {
-//   await prisma.$disconnect();
-// });
+process.on('SIGTERM', async () => {
+  await prisma.$disconnect();
+});

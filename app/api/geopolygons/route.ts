@@ -16,7 +16,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, polType, geometry } = await req.json();
+    const { name, provId, munId, polType, geometry } = await req.json();
     
     // Validate input
     if (!name || typeof name !== 'string') {
@@ -32,6 +32,8 @@ export async function POST(req: NextRequest) {
     const polygon = await prisma.geoPolygon.create({
       data: {
         name,
+        provId, 
+        munId,
         polType,
         geometry,
       },

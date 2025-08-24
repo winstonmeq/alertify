@@ -300,6 +300,8 @@ model Point {
 
 model GeoPolygon {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  provId   String?  @db.ObjectId
+  munId    String?  @db.ObjectId
   polType  String? 
   name     String
   geometry Json     // Store GeoJSON Polygon here
@@ -308,3 +310,15 @@ model GeoPolygon {
   @@map("geopolygon")
 }
 
+model Advertisement {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  sponsor     String
+  location    String
+  imageURL    String?
+  facebookUrl String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  provId      String?
+}

@@ -7,7 +7,35 @@
         "provId": "687f788a0a193d8c3d2f40bb",
         "munId": "687f7dc00a193d8c3d2f40d9",
         "municipality": "Kidapawan",
-        "hotline": "09484635713"
+        "hotline": "09484635713",
+        "isDrrCodeEnabled": "yes",
+      "emergencyList": [
+        {
+          "emer": "Flood",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Fire",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Medical",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Landslide",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        }
+        
+            ]
       },
       "geometry": {
         "type": "Polygon",
@@ -67,7 +95,54 @@
         "provId": "687f788a0a193d8c3d2f40bb",
         "munId": "687f79370a193d8c3d2f40c2",
         "municipality": "President Roxas",
-        "hotline": "09484635713"
+        "hotline": "09484635713",
+        "isDrrCodeEnabled": "yes",
+         "emergencyList": [
+        {
+          "emer": "Flood",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Fire",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Medical",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Landslide",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Police",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Falling Tree",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Garbage",
+          "munId": "687f7dc00a193d8c3d2f40d9",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        }
+        
+            ]
+
       },
       "geometry": {
         "type": "Polygon",
