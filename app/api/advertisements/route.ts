@@ -95,7 +95,7 @@ export async function POST(request: Request) {
 // PUT /api/advertisements/[id]
 export async function PUT(request: Request) {
   try {
-    const { pathname, searchParams } = new URL(request.url);
+    const { pathname} = new URL(request.url);
     const id = pathname.split('/').pop(); // Extract ID from URL
 
     if (!id) {

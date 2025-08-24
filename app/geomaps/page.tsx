@@ -1,7 +1,7 @@
 // app/geopolygons/page.tsx
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   GoogleMap,
   Polygon,
@@ -92,11 +92,11 @@ export default function GeoPolygonsPage() {
               <Polygon
                 paths={activePath}
                 options={{ editable: true, draggable: false, fillOpacity: 0.3 }}
-                onMouseUp={(e) => {
-                  // capture edits when vertices are adjusted
-                  // @ts-ignore
-                  const poly = e?.overlay as google.maps.Polygon | undefined;
-                }}
+                // onMouseUp={(e) => {
+                //   // capture edits when vertices are adjusted
+                //   // @ts-ignore
+                //   // const poly = e?.overlay as google.maps.Polygon | undefined;
+                // }}
               />
             )}
 

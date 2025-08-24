@@ -25,8 +25,8 @@ export default function CreatePolygon() {
   const [name, setName] = useState('');
   const [polType, setPolType] = useState('');
   const [geometry, setGeometry] = useState('');
-  const [provId, setProvId] = useState('');
-  const [munId, setmunId] = useState('');
+  // const [provId, setProvId] = useState('');
+  // const [munId, setmunId] = useState('');
 
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
