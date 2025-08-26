@@ -17,18 +17,12 @@
           "hotLine": "09484635713"
         },
         {
-          "emer": "Fire",
+          "emer": "Ambulance",
           "munId": "687f7dc00a193d8c3d2f40d9",
           "provId": "687f788a0a193d8c3d2f40bb",
           "hotLine": "09484635713"
         },
-        {
-          "emer": "Medical",
-          "munId": "687f7dc00a193d8c3d2f40d9",
-          "provId": "687f788a0a193d8c3d2f40bb",
-          "hotLine": "09484635713"
-        },
-        {
+         {
           "emer": "Landslide",
           "munId": "687f7dc00a193d8c3d2f40d9",
           "provId": "687f788a0a193d8c3d2f40bb",
