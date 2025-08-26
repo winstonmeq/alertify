@@ -624,7 +624,35 @@
         "provId": "687f788a0a193d8c3d2f40bb",
         "munId": "68804c8432f1e9efaf52523f",
         "municipality": "Matalam",
-        "hotline": "09484635713"
+        "hotline": "09484635713",
+         "isDrrCodeEnabled": "yes",
+         "emergencyList": [
+        {
+          "emer": "Flood",
+          "munId": "68804c8432f1e9efaf52523f",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Fire",
+          "munId": "68804c8432f1e9efaf52523f",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Medical",
+          "munId": "68804c8432f1e9efaf52523f",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Landslide",
+          "munId": "68804c8432f1e9efaf52523f",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        }        
+        
+            ]
       },
       "geometry": {
         "type": "Polygon",
