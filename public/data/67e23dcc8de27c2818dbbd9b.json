@@ -267,6 +267,12 @@
           "munId": "687f79370a193d8c3d2f40c2",
           "provId": "687f788a0a193d8c3d2f40bb",
           "hotLine": "09484635713"
+        },
+        {
+          "emer": "Police",
+          "munId": "687f79370a193d8c3d2f40c2",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
         }
         
             ]
@@ -727,7 +733,35 @@
         "provId": "687f788a0a193d8c3d2f40bb",
         "munId": "6880486e32f1e9efaf525230",
         "municipality": "Kabacan",
-        "hotline": "09484635713"
+        "hotline": "09484635713",
+         "isDrrCodeEnabled": "yes",
+         "emergencyList": [
+        {
+          "emer": "Flood",
+          "munId": "6880486e32f1e9efaf525230",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Fire",
+          "munId": "6880486e32f1e9efaf525230",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Medical",
+          "munId": "6880486e32f1e9efaf525230",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Landslide",
+          "munId": "6880486e32f1e9efaf525230",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        }        
+        
+            ]
       },
       "geometry": {
         "type": "Polygon",
@@ -809,7 +843,18 @@
         "provId": "687f788a0a193d8c3d2f40bb",
         "munId": "",
         "municipality": "M'lang",
-        "hotline": "09484635713"
+        "hotline": "09484635713",
+         "isDrrCodeEnabled": "yes",
+         "emergencyList": [
+       
+        {
+          "emer": "No Services",
+          "munId": "",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        }        
+        
+            ]
       },
       "geometry": {
         "type": "Polygon",
@@ -859,6 +904,94 @@
               125.018939062000072,
               6.886123826000073
             ]
+          ]
+        ]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "provId": "68c63b41ec2430b0b70bdcd0",
+        "munId": "68c63b5aec2430b0b70bdcd6",
+        "municipality": "Poblacion District",
+        "hotline": "09484635713",
+         "isDrrCodeEnabled": "yes",
+         "emergencyList": [
+       
+       {
+          "emer": "Flood",
+          "munId": "68c63b5aec2430b0b70bdcd6",
+          "provId": "68c63b41ec2430b0b70bdcd0",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Fire",
+          "munId": "68c63b5aec2430b0b70bdcd6",
+          "provId": "68c63b41ec2430b0b70bdcd0",
+          "hotLine": "09484635713"
+        },
+       
+        {
+          "emer": "Landslide",
+          "munId": "68c63b5aec2430b0b70bdcd6",
+          "provId": "68c63b41ec2430b0b70bdcd0",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Falling Tree",
+          "munId": "687f79370a193d8c3d2f40c2",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+         {
+          "emer": "Ambulance",
+          "munId": "687f79370a193d8c3d2f40c2",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Garbage",
+          "munId": "687f79370a193d8c3d2f40c2",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        }
+        
+            ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              125.59459,
+              7.06537
+            ],
+            [
+              125.60266,
+              7.10480
+            ],
+            [
+              125.62308,
+              7.08462
+            ],
+            [
+              125.61896,
+              7.08164
+            ],
+            [
+              125.626602,
+              7.078570
+            ],
+            [
+              124.827167669671525,
+              6.947772160658859
+            ],
+            [
+              125.60540,
+              7.05796
+            ]
+            
           ]
         ]
       }
@@ -933,7 +1066,12 @@
         "provId": "687f788a0a193d8c3d2f40bb",
         "munId": "",
         "municipality": "Tulunan",
-        "hotline": "09484635713"
+        "hotline": "09484635713",
+          "isDrrCodeEnabled": "yes",
+         "emergencyList": [
+           
+        
+            ]
       },
       "geometry": {
         "type": "Polygon",
@@ -1039,7 +1177,35 @@
         "provId": "687f788a0a193d8c3d2f40bb",
         "munId": "68804ec132f1e9efaf525244",
         "municipality": "Magpet",
-        "hotline": "09484635713"
+        "hotline": "09484635713",
+        "isDrrCodeEnabled": "yes",
+         "emergencyList": [
+        {
+          "emer": "Flood",
+          "munId": "68804ec132f1e9efaf525244",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Fire",
+          "munId": "68804ec132f1e9efaf525244",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Medical",
+          "munId": "68804ec132f1e9efaf525244",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        },
+        {
+          "emer": "Landslide",
+          "munId": "68804ec132f1e9efaf525244",
+          "provId": "687f788a0a193d8c3d2f40bb",
+          "hotLine": "09484635713"
+        }        
+        
+            ]
       },
       "geometry": {
         "type": "Polygon",
@@ -1141,7 +1307,12 @@
         "provId": "687f788a0a193d8c3d2f40bb",
         "munId": "",
         "municipality": "Midsayap",
-        "hotline": "09484635713"
+        "hotline": "09484635713",
+          "isDrrCodeEnabled": "yes",
+         "emergencyList": [
+          
+        
+            ]
       },
       "geometry": {
         "type": "Polygon",
