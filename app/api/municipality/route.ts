@@ -8,11 +8,11 @@ const prisma = new PrismaClient();
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id');
+    const provId = searchParams.get('provId');
 
-    if (id) {
-      const municipality = await prisma.municipality.findUnique({
-        where: { id },
+    if (provId) {
+      const municipality = await prisma.municipality.findMany({
+        where: { provId },
         select: {
           id: true,
           municipalityName: true,
