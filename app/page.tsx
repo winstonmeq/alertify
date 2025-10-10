@@ -60,7 +60,6 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-white">
       <div className="flex flex-row items-center justify-center gap-4 p-4">
         <Link href="/geopolygons">Geo Polygons</Link> 
-        <Link href="/polygons">Polygons</Link>
           <Link href="/drr-code">DRR Code</Link></div>
       <h1 className="text-2xl">Q-ALERT S1 {session?.user?.email}</h1>
       <button
