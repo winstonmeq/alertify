@@ -65,3 +65,41 @@ export async function POST(request: Request) {
     await prisma.$disconnect();
   }
 }
+
+
+// ✅ FIND MOBILE ENDPOINT
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const mobile = searchParams.get("mobile");
+  const token = searchParams.get("token");
+
+  if (token !== VERIFY_TOKEN) {
+    return new NextResponse("Verification failed", { status: 403 });
+  }
+
+  if (!mobile) {
+    return NextResponse.json({ error: "Mobile number is required" }, { status: 400 });
+  }
+
+  try {
+    const user = await prisma.mobuser.findUnique({
+      where: { mobile },
+      select: {
+        id: true,
+       
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json({ message: "Mobile not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ user }, { status: 200 });
+
+  } catch (error) {
+    console.error("Error fetching mobile:", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
