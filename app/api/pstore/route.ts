@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
         privateName: true,
         privateDes: true,
         privatePhone: true,
+        pimageurl: true,
         provId: true,
         munId: true,
       },
