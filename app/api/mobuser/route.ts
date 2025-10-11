@@ -19,8 +19,8 @@ export async function POST(request: Request) {
       requestBody;
 
     // 1️⃣ Check if code exists and is unclaimed
-    const existingCode = await prisma.drrCode.findUnique({
-      where: { drrcode },
+    const existingCode = await prisma.drrCode.findFirst({
+      where: { drrcode, provId, munId },
     });
 
     if (!existingCode) {

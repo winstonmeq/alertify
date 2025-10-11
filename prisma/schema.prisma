@@ -241,6 +241,8 @@ model Province {
   polygon Polygon[]  
   drrcode DrrCode[]
   fcmmobile Fcmmobile[]
+  privatestore PrivateStore[]
+  privatereport PrivateReport[]
   @@map("province")
 
 }
@@ -270,6 +272,8 @@ model Municipality {
   drrcode DrrCode[]
   fcmweb Fcmweb[]
   fcmmobile Fcmmobile[]
+  privaterstore PrivateStore[]
+  privatereport PrivateReport[]
   @@map("municipality")
 
 }
@@ -321,4 +325,43 @@ model Advertisement {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   provId      String?
+}
+
+
+model PrivateStore {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId 
+  privateName  String
+  privatePhone String
+  privateDes   String
+  pimageurl    String?
+  barangay  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  provId    String @db.ObjectId
+  province  Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
+  munId    String @db.ObjectId
+  municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
+  privateReport PrivateReport[]
+  @@map("privateStore")
+
+}
+
+model PrivateReport {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId 
+  prIncident  String
+  prNote   String
+  barangay  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  psId   String @db.ObjectId
+  privatestore  PrivateStore     @relation(fields: [psId], references: [id], onDelete: Cascade)
+
+  provId    String @db.ObjectId
+  province  Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
+  munId    String @db.ObjectId
+  municipality  Municipality     @relation(fields: [munId], references: [id], onDelete: Cascade)
+
+  @@map("privatereport")
+
 }
