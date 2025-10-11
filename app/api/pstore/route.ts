@@ -5,19 +5,31 @@ import { NextResponse, NextRequest } from "next/server";
 const prisma = new PrismaClient();
 
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+
+    const { searchParams } = request.nextUrl;
+  const provId = searchParams.get("provId");
+  const munId = searchParams.get("munId");
+
+  if (!provId || !munId) {
+    return NextResponse.json({ error: "Missing provId or munId" }, { status: 400 });
+  }
+
   try {
-    const codes = await prisma.privateStore.findMany({
-      include: {
-        province: {
-          select: { id: true, provinceName: true },
-        },
-        municipality: {
-          select: { id: true, municipalityName: true },
-        },
+    const store = await prisma.privateStore.findMany({
+      where: {
+        provId: String(provId),
+      },
+      select: {
+        id: true,
+        privateName: true,
+        privateDes: true,
+        privatePhone: true,
+        provId: true,
+        munId: true,
       },
     });
-    return NextResponse.json(codes);
+    return NextResponse.json(store);
   } catch (error) {
     console.error('Error fetching codes:', error);
     return NextResponse.json({ error: 'Error fetching codes' }, { status: 500 });
