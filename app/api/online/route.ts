@@ -15,6 +15,7 @@ interface Emergency {
   munName: string;
   name: string;
   mobile: string;
+  verified: boolean;
   mobUserId: string;
   munId: string;
   provId: string;
@@ -87,7 +88,7 @@ export async function POST(request: Request) {
 
   try {
     const requestBody = await request.json();
-    const { emergency, lat, mobUserId, long, barangay, munName, name, mobile, munId, provId, photoURL } = requestBody;
+    const { emergency, lat, mobUserId, long, barangay, munName, name, mobile, verified, munId, provId, photoURL } = requestBody;
 
     if (!emergency || !lat || !long || !barangay || !name || !mobile) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -124,7 +125,7 @@ export async function POST(request: Request) {
         munId,
         provId,
         status: true,
-        verified: false,
+        verified: verified,
         photoURL,
       },
     });
@@ -151,7 +152,7 @@ export async function POST(request: Request) {
     //bago nga config para mag handle large number of tokens
     // Send FCM notifications using multicast
     const tokens = getToken.filter((t) => t.fcmToken).map((t) => t.fcmToken);
-    if (tokens.length > 0) {
+    if (tokens.length > 0 && verified === true) {
       const chunkSize = 500; // Firebase multicast limit
       const tokenChunks = [];
       for (let i = 0; i < tokens.length; i += chunkSize) {

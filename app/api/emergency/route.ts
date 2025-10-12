@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN; // Define your verify token here
 
 export async function POST(request: Request) {
-  
   const { searchParams } = new URL(request.url);
 
   try {
@@ -87,7 +86,6 @@ export async function POST(request: Request) {
   }
 }
 
-
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1", 10); // Correct radix to 10
@@ -103,22 +101,25 @@ export async function GET(request: NextRequest) {
     const whereClause: Prisma.EmergencyWhereInput = {
       ...(provId && { provId }),
       ...(munId && { munId }),
-      ...(startDate && endDate && {
-        createdAt: {
-          gte: new Date(startDate),
-          lte: new Date(endDate),
-        },
-      }),
-      ...(startDate && !endDate && {
-        createdAt: {
-          gte: new Date(startDate),
-        },
-      }),
-      ...(!startDate && endDate && {
-        createdAt: {
-          lte: new Date(endDate),
-        },
-      }),
+      ...(startDate &&
+        endDate && {
+          createdAt: {
+            gte: new Date(startDate),
+            lte: new Date(endDate),
+          },
+        }),
+      ...(startDate &&
+        !endDate && {
+          createdAt: {
+            gte: new Date(startDate),
+          },
+        }),
+      ...(!startDate &&
+        endDate && {
+          createdAt: {
+            lte: new Date(endDate),
+          },
+        }),
     };
 
     // Fetch emergency data
