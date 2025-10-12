@@ -15,7 +15,7 @@ interface Emergency {
   munName: string;
   name: string;
   mobile: string;
-  verified: boolean;
+  verified: string;
   mobUserId: string;
   munId: string;
   provId: string;
@@ -124,7 +124,7 @@ export async function POST(request: Request) {
         mobile,
         munId,
         provId,
-        status: true,
+        status: "true",
         verified: verified,
         photoURL,
       },

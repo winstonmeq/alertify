@@ -93,8 +93,8 @@ model Emergency {
   munName   String
   name      String
   photoURL  String
- status    Boolean  @default(true)
-  verified  Boolean  @default(false)
+ status     String  
+  verified  String  
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
  mobUserId   String @db.ObjectId
