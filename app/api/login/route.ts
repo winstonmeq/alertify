@@ -51,7 +51,6 @@ export async function POST(request: Request) {
           mobile: user.mobile,
           munId: user.munId,
           provId: user.provId,
-          hotlineNumber: user.municipality.hotlineNumber,
           munName: user.municipality.municipalityName,
           drrcode: user.drrcode,
         },
