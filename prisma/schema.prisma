@@ -154,9 +154,8 @@ model Mobuser {
 }
 
 model DrrCode {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId 
-  drrcode   String @unique
-  selfie     String? 
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId 
+  drrcode   String    @unique
   codeStatus Boolean  @default(false)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt

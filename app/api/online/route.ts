@@ -152,8 +152,8 @@ export async function POST(request: Request) {
     //bago nga config para mag handle large number of tokens
     // Send FCM notifications using multicast
     const tokens = getToken.filter((t) => t.fcmToken).map((t) => t.fcmToken);
-    if (tokens.length > 0 && verified === true) {
-      const chunkSize = 500; // Firebase multicast limit
+    if (tokens.length > 0 && verified === "verified") {
+      const chunkSize = 100; // Firebase multicast limit
       const tokenChunks = [];
       for (let i = 0; i < tokens.length; i += chunkSize) {
         tokenChunks.push(tokens.slice(i, i + chunkSize));

@@ -29,7 +29,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { drrcode, selfie, mobUserId, provId, munId } = body;
+    const { drrcode, mobUserId, provId, munId } = body;
 
     // Validate input
     if (!drrcode || !provId || !munId) {
@@ -40,7 +40,6 @@ export async function POST(req: NextRequest) {
     const newCode = await prisma.drrCode.create({
       data: {
         drrcode,
-        selfie,
         codeStatus: false,
         mobUserId,
         provId,
@@ -55,7 +54,10 @@ export async function POST(req: NextRequest) {
         },
       },
     });
+
     return NextResponse.json(newCode);
+
+
   } catch (error) {
     console.error('Error creating code:', error);
     return NextResponse.json({ error: 'Error creating code' }, { status: 500 });

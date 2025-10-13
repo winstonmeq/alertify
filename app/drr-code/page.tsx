@@ -51,13 +51,11 @@ export default function DrrCodeManager() {
   
   const [formData, setFormData] = useState({
     drrcode: '',
-    selfie: '',
     provId: '',
     munId: '',
   });
   const [bulkFormData, setBulkFormData] = useState({
     count: '100',
-    selfie: '',
     provId: '',
     munId: '',
   });
@@ -146,7 +144,6 @@ export default function DrrCodeManager() {
       toast.success('Code created successfully');
       setFormData({
         drrcode: '',
-        selfie: '',
         provId: '',
         munId: '',
       });
@@ -179,7 +176,6 @@ export default function DrrCodeManager() {
       toast.success(`${validatedData.count} codes created successfully`);
       setBulkFormData({
         count: '100',
-        selfie: '',
         provId: '',
         munId: '',
       });

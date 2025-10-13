@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 
 interface DrrCode {
   drrcode: string;
-  selfie: string;
     mobUserId?: string;
   provId: string;   
     munId: string;
@@ -30,7 +29,6 @@ export async function POST(req: NextRequest) {
     const createdCodes = await prisma.drrCode.createMany({
       data: codes.map((code: DrrCode) => ({
         drrcode: code.drrcode,
-        selfie: code.selfie,
         codeStatus: false,
         mobUserId: code.mobUserId,
         provId: code.provId,

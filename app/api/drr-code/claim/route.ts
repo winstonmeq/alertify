@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export async function PUT(req: NextRequest) {
   try {
-    const { drrcode, mobUserId, selfie } = await req.json();
+    const { drrcode, mobUserId } = await req.json();
 
     // Validate input
     if (!drrcode || !mobUserId) {
@@ -30,7 +30,6 @@ export async function PUT(req: NextRequest) {
       data: {
         mobUserId,
         codeStatus: true,
-        selfie: selfie || existingCode.selfie, // Use existing selfie if not provided
       },
      
     });

@@ -18,7 +18,8 @@ export async function GET(request: NextRequest) {
   try {
     const store = await prisma.privateStore.findMany({
       where: {
-        provId: String(provId),
+         provId: String(provId),
+         munId: String(munId),
       },
       select: {
         id: true,
