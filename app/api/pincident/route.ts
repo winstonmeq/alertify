@@ -7,6 +7,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const provId = searchParams.get("provId");
   const munId = searchParams.get("munId");
+    const psId = searchParams.get("psId");
 
   if (!provId || !munId ) {
     return NextResponse.json({ error: "Missing provId or munId" }, { status: 400 });
@@ -17,6 +18,7 @@ export async function GET(request: NextRequest) {
       where: {
         provId: String(provId),
         munId: String(munId),
+        psId: String(psId),
       },
       select: {
         id: true,
