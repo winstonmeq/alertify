@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const provId = searchParams.get("provId");
   const munId = searchParams.get("munId");
 
-  if (!provId || !munId) {
+  if (!provId || !munId ) {
     return NextResponse.json({ error: "Missing provId or munId" }, { status: 400 });
   }
 
@@ -21,14 +21,15 @@ export async function GET(request: NextRequest) {
       select: {
         id: true,
         prIncident: true,
-        prNote: true,
+        prdrrphone: true,
+        notifyId: true,
         provId: true,
         munId: true,
       },
     });
 
     if (!incidents) {
-      return NextResponse.json({ message: "No incidents found" }, { status: 404 });
+      return NextResponse.json({ message: "No type of incidents created" }, { status: 404 });
     }
 
     return NextResponse.json(incidents);

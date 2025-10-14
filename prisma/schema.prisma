@@ -348,14 +348,12 @@ model PrivateStore {
 model PrivateReport {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId 
   prIncident  String
-  prNote   String
-  barangay  String
+  prdrrphone   String
+  notifyId   String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-
   psId   String @db.ObjectId
   privatestore  PrivateStore     @relation(fields: [psId], references: [id], onDelete: Cascade)
-
   provId    String @db.ObjectId
   province  Province     @relation(fields: [provId], references: [id], onDelete: Cascade)
   munId    String @db.ObjectId
