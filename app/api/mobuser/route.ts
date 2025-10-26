@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     });
 
    return NextResponse.json(
-      { message: "Mobile user saved successfully", mobUserId: savedData.id },
+      { message: "Mobile user saved successfully", mobUserId: savedData.id, phone: savedData.mobile },
       { status: 201 }
     );
 
