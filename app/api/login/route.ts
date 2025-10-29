@@ -5,6 +5,24 @@ import bcrypt from "bcrypt"; // ✅ Import bcrypt
 const prisma = new PrismaClient();
 const VERIFY_TOKEN = "mySecretAlertifyToken2025";
 
+
+
+// Helper function to add CORS headers
+function addCorsHeaders(response: NextResponse) {
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  return response;
+}
+
+// Handle OPTIONS preflight requests
+export async function OPTIONS() {
+  const response = NextResponse.json({}, { status: 200 });
+  return addCorsHeaders(response);
+}
+
+
+
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const token = searchParams.get("token");

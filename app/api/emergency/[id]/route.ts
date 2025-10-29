@@ -27,15 +27,21 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     const emergency = await prisma.emergency.findUnique({
       where: { id:id },
     });
-    if (!emergency) {
-      return NextResponse.json({ error: 'Emergency not found' }, { status: 404 });
-    }
+
+      if (!emergency) {
+        return NextResponse.json({ error: 'Emergency not found' }, { status: 404 });
+      }
+
     return NextResponse.json(emergency, { status: 200 });
+
+
   } catch (error) {
     console.error('Error fetching emergency:', error);
     return NextResponse.json({ error: 'Failed to fetch emergency' }, { status: 500 });
   }
 }
+
+
 
 // PUT: Update an emergency by ID (only status and verified)
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import admin from 'firebase-admin';
-import { getLocationData, PlacesResponse } from '../places/utils';
+// import { getLocationData, PlacesResponse } from '../places/utils';
 
 const prisma = new PrismaClient();
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
@@ -95,20 +95,20 @@ export async function POST(request: Request) {
     }
 
     //get location data from external service it is assumed that getLocationData is defined in places/utils.ts
-    let externalData: PlacesResponse;
-    try {
-      externalData = await getLocationData(lat, long);
-    } catch (error) {
-      console.error('Location validation failed:', error);
-      return NextResponse.json({ error: 'Failed to validate coordinates' }, { status: 400 });
-    }
+    // let externalData: PlacesResponse;
+    // try {
+    //   externalData = await getLocationData(lat, long);
+    // } catch (error) {
+    //   console.error('Location validation failed:', error);
+    //   return NextResponse.json({ error: 'Failed to validate coordinates' }, { status: 400 });
+    // }
 
 
     //filter and format location data
-    const filtered = externalData.current?.filter((item) => item.polType !== 'mun') || [];
-    const locationIncident = filtered.length > 0 ? filtered.map((item) => item.name).join(', ') : 'Unknown Location';
-    const filtered200 = externalData.nearby200?.filter((item) => item.polType === 'lot' || item.polType === 'bldg') || [];
-    const nearby200 = filtered200.length > 0 ? filtered200.map((item) => item.name).join(', ') : 'none';
+    // const filtered = externalData.current?.filter((item) => item.polType !== 'mun') || [];
+    // const locationIncident = filtered.length > 0 ? filtered.map((item) => item.name).join(', ') : 'Unknown Location';
+    // const filtered200 = externalData.nearby200?.filter((item) => item.polType === 'lot' || item.polType === 'bldg') || [];
+    // const nearby200 = filtered200.length > 0 ? filtered200.map((item) => item.name).join(', ') : 'none';
 
     // Save to database
     const savedData = await prisma.emergency.create({
@@ -117,14 +117,14 @@ export async function POST(request: Request) {
         emergency,
         lat,
         long,
-        barangay: locationIncident,
-        nearby200,
+        barangay: "",
+        nearby200:"",
         munName,
         name,
         mobile,
         munId,
         provId,
-        status: "true",
+        status: "false",
         verified: verified,
         photoURL,
       },

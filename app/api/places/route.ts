@@ -44,6 +44,7 @@ export async function OPTIONS() {
   return addCorsHeaders(response);
 }
 
+
 function getEdgeDistance(polygonA: Point[], polygonB: Point[]): number {
   const R = 6371e3; // Earth radius in meters
   const toRad = (deg: number) => (deg * Math.PI) / 180;
