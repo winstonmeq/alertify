@@ -6,7 +6,7 @@
 			"properties": {
 				"provId": "687f788a0a193d8c3d2f40bb",
 				"munId": "687f7dc00a193d8c3d2f40d9",
-				"municipality": "Kidapawan",
+				"municipality": "Kidapawan City",
 				"hotline": "09484635713",
 				"isDrrCodeEnabled": "yes",
 				"emergencyList": [
@@ -32,7 +32,7 @@
 						"hotLine2": ""
 					},
 					{
-						"emer": "Cotelco",
+						"emer": "Road_Accident",
 						"munId": "687f7dc00a193d8c3d2f40d9",
 						"provId": "687f788a0a193d8c3d2f40bb",
 						"hotLine": "09484635713",
@@ -143,13 +143,7 @@
 						"hotLine": "09484635713",
 						"hotLine2": "911"
 					},
-					{
-						"emer": "Garbage",
-						"munId": "687f79370a193d8c3d2f40c2",
-						"provId": "687f788a0a193d8c3d2f40bb",
-						"hotLine": "09484635713",
-						"hotLine2": ""
-					},
+					
 					{
 						"emer": "Police",
 						"munId": "687f79370a193d8c3d2f40c2",
@@ -163,14 +157,8 @@
 						"provId": "687f788a0a193d8c3d2f40bb",
 						"hotLine": "09484635713",
 						"hotLine2": ""
-					},
-					{
-						"emer": "Road_Accident",
-						"munId": "687f79370a193d8c3d2f40c2",
-						"provId": "687f788a0a193d8c3d2f40bb",
-						"hotLine": "09484635713",
-						"hotLine2": ""
 					}
+					
 				]
 			},
 			"geometry": {
@@ -315,7 +303,7 @@
 						"hotLine2": "911"
 					},
 					{
-						"emer": "Road_Accident",
+						"emer": "Ambulance",
 						"munId": "6880486e32f1e9efaf525230",
 						"provId": "687f788a0a193d8c3d2f40bb",
 						"hotLine": "09484635713",
@@ -495,13 +483,7 @@
 						"hotLine": "09484635713",
 						"hotLine2": "911"
 					},
-					{
-						"emer": "Road_Accident",
-						"munId": "687f79370a193d8c3d2f40c2",
-						"provId": "687f788a0a193d8c3d2f40bb",
-						"hotLine": "09484635713",
-						"hotLine2": ""
-					},
+					
 					{
 						"emer": "Landslide",
 						"munId": "687f79370a193d8c3d2f40c2",
@@ -523,13 +505,7 @@
 						"hotLine": "09484635713",
 						"hotLine2": "911"
 					},
-					{
-						"emer": "Garbage",
-						"munId": "687f79370a193d8c3d2f40c2",
-						"provId": "687f788a0a193d8c3d2f40bb",
-						"hotLine": "09484635713",
-						"hotLine2": ""
-					},
+				
 					{
 						"emer": "Police",
 						"munId": "687f79370a193d8c3d2f40c2",
@@ -603,6 +579,192 @@
 							124.98476756356276,
 							7.113239494818497
 						]
+					]
+				]
+			}
+		},
+
+		{
+			"type": "Feature",
+			"properties": {
+				"provId": "687f788a0a193d8c3d2f40bb",
+				"munId": "68804c8432f1e9efaf52523f",
+				"municipality": "Matalam",
+				"hotline": "09484635713",
+				"isDrrCodeEnabled": "yes",
+				"emergencyList": [
+					{
+						"emer": "Flood",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					{
+						"emer": "Fire",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					},
+					
+					{
+						"emer": "Landslide",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					{
+						"emer": "Falling Tree",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					{
+						"emer": "Ambulance",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					},
+				
+					{
+						"emer": "Police",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					}
+				]
+			},
+			"geometry": {
+				"type": "Polygon",
+				"coordinates": [
+					[
+						[
+							124.84176,
+							7.03338
+						],
+						[
+							124.90562,
+							7.16966
+						],
+						[
+							124.908364,
+							7.301804
+						],
+						[
+							125.01846,
+							7.29525
+						],
+						[
+							125.02395,
+							7.21487
+						],
+						[
+							124.94863,
+							7.07589
+						],
+						[
+							124.93021,
+							7.03104
+						]
+						
+					]
+				]
+			}
+		},
+
+		{
+			"type": "Feature",
+			"properties": {
+				"provId": "687f788a0a193d8c3d2f40bb",
+				"munId": "68804c8432f1e9efaf52523f",
+				"municipality": "Antipas",
+				"hotline": "09484635713",
+				"isDrrCodeEnabled": "yes",
+				"emergencyList": [
+					{
+						"emer": "Flood",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					{
+						"emer": "Fire",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					},
+					
+					{
+						"emer": "Landslide",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					{
+						"emer": "Road_Accident",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					{
+						"emer": "Ambulance",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					},
+				
+					{
+						"emer": "Police",
+						"munId": "68804c8432f1e9efaf52523f",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					}
+				]
+			},
+			"geometry": {
+				"type": "Polygon",
+				"coordinates": [
+					[
+						[
+							125.02270,
+							7.20594
+						],
+						[
+							125.03580,
+							7.25901
+						],
+						[
+							125.03523,
+							7.32007
+						],
+						[
+							125.10733,
+							7.31190
+						],
+						[
+							125.12175,
+							7.26660
+						],
+						[
+							125.10733,
+							7.23391
+						],
+						[
+							125.05000,
+							7.19712
+						]
+						
 					]
 				]
 			}
