@@ -773,8 +773,8 @@
 		{
 			"type": "Feature",
 			"properties": {
-				"provId": "687f788a0a193d8c3d2f40bb",
-				"munId": "6880470332f1e9efaf525226",
+				"provId": "68c74c68ea5c361ae5d907f6",
+				"munId": "6902bbb8c1002226dfb5ac17",
 				"municipality": "Daliao",
 				"hotline": "09484635713",
 				"isDrrCodeEnabled": "yes",
@@ -782,46 +782,46 @@
 					
 					{
 						"emer": "Fire",
-						"munId": "6880470332f1e9efaf525226",
-						"provId": "687f788a0a193d8c3d2f40bb",
+						"munId": "6902bbb8c1002226dfb5ac17",
+						"provId": "68c74c68ea5c361ae5d907f6",
 						"hotLine": "09484635713",
 						"hotLine2": "911"
 					},
 								
 					{
 						"emer": "Police",
-						"munId": "6880470332f1e9efaf525226",
-						"provId": "687f788a0a193d8c3d2f40bb",
+						"munId": "6902bbb8c1002226dfb5ac17",
+						"provId": "68c74c68ea5c361ae5d907f6",
 						"hotLine": "09484635713",
 						"hotLine2": "911"
 					},
 
 					{
 						"emer": "Flood",
-						"munId": "6880470332f1e9efaf525226",
-						"provId": "687f788a0a193d8c3d2f40bb",
+						"munId": "6902bbb8c1002226dfb5ac17",
+						"provId": "68c74c68ea5c361ae5d907f6",
 						"hotLine": "09484635713",
 						"hotLine2": ""
 					},
 					
 					{
 						"emer": "Storm_surges",
-						"munId": "6880470332f1e9efaf525226",
-						"provId": "687f788a0a193d8c3d2f40bb",
+						"munId": "6902bbb8c1002226dfb5ac17",
+						"provId": "68c74c68ea5c361ae5d907f6",
 						"hotLine": "09484635713",
 						"hotLine2": ""
 					},
 					{
 						"emer": "Road_Accident",
-						"munId": "6880470332f1e9efaf525226",
-						"provId": "687f788a0a193d8c3d2f40bb",
+						"munId": "6902bbb8c1002226dfb5ac17",
+						"provId": "68c74c68ea5c361ae5d907f6",
 						"hotLine": "09484635713",
 						"hotLine2": "911"
 					},
 					{
 						"emer": "Ambulance",
-						"munId": "6880470332f1e9efaf525226",
-						"provId": "687f788a0a193d8c3d2f40bb",
+						"munId": "6902bbb8c1002226dfb5ac17",
+						"provId": "68c74c68ea5c361ae5d907f6",
 						"hotLine": "09484635713",
 						"hotLine2": "911"
 					}
