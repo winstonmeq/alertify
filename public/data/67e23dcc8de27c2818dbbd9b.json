@@ -768,6 +768,121 @@
 					]
 				]
 			}
+		},
+
+		{
+			"type": "Feature",
+			"properties": {
+				"provId": "687f788a0a193d8c3d2f40bb",
+				"munId": "6880470332f1e9efaf525226",
+				"municipality": "Daliao",
+				"hotline": "09484635713",
+				"isDrrCodeEnabled": "yes",
+				"emergencyList": [
+					
+					{
+						"emer": "Fire",
+						"munId": "6880470332f1e9efaf525226",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					},
+								
+					{
+						"emer": "Police",
+						"munId": "6880470332f1e9efaf525226",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					},
+
+					{
+						"emer": "Flood",
+						"munId": "6880470332f1e9efaf525226",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					
+					{
+						"emer": "Storm_surges",
+						"munId": "6880470332f1e9efaf525226",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					{
+						"emer": "Road_Accident",
+						"munId": "6880470332f1e9efaf525226",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					},
+					{
+						"emer": "Ambulance",
+						"munId": "6880470332f1e9efaf525226",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					}
+				]
+			},
+			"geometry": {
+				"type": "Polygon",
+				"coordinates": [
+					[
+						[
+							125.50781,
+							7.02338
+						],
+						[
+							125.51210,
+							7.02093
+						],
+						[
+							125.51747,
+							7.01562
+						],
+						[
+							125.50632,
+							7.00433
+						],
+						[
+							125.50184,
+							7.00692
+						],
+						[
+							125.49760,
+							7.01020
+						],
+						[
+							125.49989,
+							7.01234
+						],
+						[
+							125.50028,
+							7.01194
+						],
+						[
+							125.50070,
+							7.01234
+						],
+						[
+							125.50190,
+							7.01139
+						],
+						[
+							125.50428,
+							7.01637
+						],
+						[
+							125.50727,
+							7.02245
+						]
+						
+					]
+				]
+			}
 		}
 	]
 }
