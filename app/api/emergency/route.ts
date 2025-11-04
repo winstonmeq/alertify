@@ -63,7 +63,7 @@ export async function POST(request: Request) {
           munId,
           provId,
           photoURL: photoURL || "",
-          status: "true",
+          status: "unconfirmed",
           verified: "false",
         },
       });

@@ -6,13 +6,15 @@ const prisma = new PrismaClient();
 
 
 export async function GET(req: NextRequest) {
+
   try {
+  
     const { searchParams } = new URL(req.url);
     const provId = searchParams.get('provId');
 
     if (provId) {
       const municipality = await prisma.municipality.findMany({
-        where: { provId },
+        where: { provId, mdrrmo: 'LGU' },
         select: {
           id: true,
           municipalityName: true,
@@ -33,33 +35,34 @@ export async function GET(req: NextRequest) {
       if (!municipality) {
         return NextResponse.json({ error: 'Municipality not found' }, { status: 404 });
       }
-      return NextResponse.json(municipality);
+      return NextResponse.json({municipality},{ status: 200 });
     }
 
-    const municipalities = await prisma.municipality.findMany({
-      select: {
-        id: true,
-        municipalityName: true,
-        municipalityFCMToken: true,
-        hotlineNumber: true,
-        lat: true,
-        long: true,
-        zoom: true,
-        mdrrmo: true,
-        barangays: true,
-        munlogo: true,
-        createdAt: true,
-        updatedAt: true,
-        userId: true,
-        provId: true,
-      },
-    });
-    return NextResponse.json(municipalities);
+    // const municipalities = await prisma.municipality.findMany({
+    //   select: {
+    //     id: true,
+    //     municipalityName: true,
+    //     municipalityFCMToken: true,
+    //     hotlineNumber: true,
+    //     lat: true,
+    //     long: true,
+    //     zoom: true,
+    //     mdrrmo: true,
+    //     barangays: true,
+    //     munlogo: true,
+    //     createdAt: true,
+    //     updatedAt: true,
+    //     userId: true,
+    //     provId: true,
+    //   },
+    // });
+    return NextResponse.json(['No provId provided'], { status: 400 });
   } catch (error) {
     console.error('Error fetching municipalities:', error);
     return NextResponse.json({ error: 'Error fetching municipalities' }, { status: 500 });
   }
 }
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -101,6 +104,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Error creating municipality' }, { status: 500 });
   }
 }
+
 
 export async function PUT(req: NextRequest) {
   try {

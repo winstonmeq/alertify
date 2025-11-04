@@ -124,8 +124,8 @@ export async function POST(request: Request) {
         mobile,
         munId,
         provId,
-        status: "false",
-        verified: verified,
+        status: "unconfirmed",
+        verified,
         photoURL,
       },
     });
