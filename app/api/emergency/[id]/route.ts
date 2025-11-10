@@ -51,7 +51,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
   try {
     const data = await req.json();
-    const { status, verified } = data;
+    const { status, verified, barangay } = data;
 
     if (!status || !verified) {
       return NextResponse.json({ error: 'Status and verified must be boolean values' }, { status: 400 });
@@ -62,6 +62,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       data: {
         status,
         verified,
+        barangay
       },
     });
     

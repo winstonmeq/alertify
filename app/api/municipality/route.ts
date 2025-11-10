@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
       if (!municipality) {
         return NextResponse.json({ error: 'Municipality not found' }, { status: 404 });
       }
-      return NextResponse.json({municipality},{ status: 200 });
+      return NextResponse.json(municipality);
     }
 
     // const municipalities = await prisma.municipality.findMany({
