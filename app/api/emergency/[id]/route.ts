@@ -57,6 +57,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       return NextResponse.json({ error: 'Status and verified must be boolean values' }, { status: 400 });
     }
 
+    console.log(data)
+
     const response = await prisma.emergency.update({
       where: { id },
       data: {
