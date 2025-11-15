@@ -70,6 +70,7 @@ export async function POST(request: Request) {
           munId: user.munId,
           provId: user.provId,
           munName: user.municipality.municipalityName,
+          hotlineNumber: user.municipality.hotlineNumber,
           drrcode: user.drrcode,
         },
       },
