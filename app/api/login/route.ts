@@ -71,6 +71,8 @@ export async function POST(request: Request) {
           provId: user.provId,
           munName: user.municipality.municipalityName,
           hotlineNumber: user.municipality.hotlineNumber,
+          latOrig: user.municipality.lat,
+          longOrig: user.municipality.long,
           drrcode: user.drrcode,
         },
       },
