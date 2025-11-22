@@ -6,7 +6,7 @@
 			"properties": {
 				"provId": "687f788a0a193d8c3d2f40bb",
 				"munId": "687f7dc00a193d8c3d2f40d9",
-				"municipality": "Kidapawan City",
+				"municipality": "Kidapawan_City",
 				"hotline": "09484635713",
 				"isDrrCodeEnabled": "yes",
 				"emergencyList": [
@@ -69,6 +69,80 @@
 						],
 						[
 							125.11749040256912, 7.014617695365404
+						]
+					]
+				]
+			}
+		},
+
+		{
+			"type": "Feature",
+			"properties": {
+				"provId": "687f788a0a193d8c3d2f40bb",
+				"munId": "687f7dc00a193d8c3d2f40d9",
+				"municipality": "Kidapawan_2",
+				"hotline": "09484635713",
+				"isDrrCodeEnabled": "yes",
+				"emergencyList": [
+					{
+						"emer": "Flood2",
+						"munId": "687f7dc00a193d8c3d2f40d9",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					{
+						"emer": "Ambulance2",
+						"munId": "687f7dc00a193d8c3d2f40d9",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					},
+					{
+						"emer": "Landslide2",
+						"munId": "687f7dc00a193d8c3d2f40d9",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					{
+						"emer": "Road_Accident2",
+						"munId": "687f7dc00a193d8c3d2f40d9",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": ""
+					},
+					{
+						"emer": "Fire2",
+						"munId": "687f7dc00a193d8c3d2f40d9",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					},
+					{
+						"emer": "Police2",
+						"munId": "687f7dc00a193d8c3d2f40d9",
+						"provId": "687f788a0a193d8c3d2f40bb",
+						"hotLine": "09484635713",
+						"hotLine2": "911"
+					}
+				]
+			},
+			"geometry": {
+				"type": "Polygon",
+				"coordinates": [
+					[
+						[
+							125.11723354386112, 7.014936449500183
+						],
+						[
+							125.11801406666164, 7.0149497601543995
+						],
+						[
+							125.11793360039353, 7.014175079446277
+						],
+						[
+							125.11678025055086, 7.014193714392528
 						]
 					]
 				]

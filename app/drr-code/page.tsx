@@ -82,22 +82,34 @@ export default function DrrCodeManager() {
     }
   }, []);
 
-  const fetchMunicipalities = useCallback(async () => {
-    setIsLoading((prev) => ({ ...prev, municipalities: true }));
-    try {
-      const response = await axiosInstance.get('/municipality');
-      setMunicipalities(response.data);
-    } catch (error) {
-      handleError(error, 'Failed to fetch municipalities');
-    } finally {
-      setIsLoading((prev) => ({ ...prev, municipalities: false }));
-    }
-  }, []);
+  // Fetch municipalities for selected province
+   const fetchMunicipalities = useCallback(async (provId: string) => {
+     if (!provId) {
+       setMunicipalities([]);
+       return;
+     }
+ 
+     setIsLoading((prev) => ({ ...prev, municipalities: true }));
+     try {
+       const response = await axiosInstance.get(`/municipality?provId=${provId}`);
+       setMunicipalities(response.data || []);
+     } catch (err) {
+       handleError(err, 'Failed to load municipalities');
+       setMunicipalities([]);
+     } finally {
+       setIsLoading((prev) => ({ ...prev, municipalities: false }));
+     }
+   }, []);
 
   useEffect(() => {
     fetchProvinces();
-    fetchMunicipalities();
-  }, [fetchProvinces, fetchMunicipalities]);
+  }, [fetchProvinces]);
+
+
+   // Load municipalities when province changes
+  useEffect(() => {
+    fetchMunicipalities(formData.provId);
+  }, [formData.provId, fetchMunicipalities]);
 
   // Error handling
   const handleError = (error: unknown, defaultMessage: string) => {
