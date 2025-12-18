@@ -699,7 +699,7 @@
 				"provId": "68c74c68ea5c361ae5d907f6",
 				"munId": "6902bbb8c1002226dfb5ac17",
 				"municipality": "Daliao",
-				"hotline": "09484635713",
+				"hotline": "09081139032",
 				"isDrrCodeEnabled": "yes",
 				"emergencyList": [
 					
@@ -707,7 +707,7 @@
 						"emer": "Fire",
 						"munId": "6902bbb8c1002226dfb5ac17",
 						"provId": "68c74c68ea5c361ae5d907f6",
-						"hotLine": "09484635713",
+						"hotLine": "09081139032",
 						"hotLine2": "911"
 					},
 								
@@ -715,7 +715,7 @@
 						"emer": "Police",
 						"munId": "6902bbb8c1002226dfb5ac17",
 						"provId": "68c74c68ea5c361ae5d907f6",
-						"hotLine": "09484635713",
+						"hotLine": "09081139032",
 						"hotLine2": "911"
 					},
 
@@ -723,7 +723,7 @@
 						"emer": "Flood",
 						"munId": "6902bbb8c1002226dfb5ac17",
 						"provId": "68c74c68ea5c361ae5d907f6",
-						"hotLine": "09484635713",
+						"hotLine": "09081139032",
 						"hotLine2": ""
 					},
 					
@@ -731,21 +731,21 @@
 						"emer": "Storm_surges",
 						"munId": "6902bbb8c1002226dfb5ac17",
 						"provId": "68c74c68ea5c361ae5d907f6",
-						"hotLine": "09484635713",
+						"hotLine": "09081139032",
 						"hotLine2": ""
 					},
 					{
 						"emer": "Road_Accident",
 						"munId": "6902bbb8c1002226dfb5ac17",
 						"provId": "68c74c68ea5c361ae5d907f6",
-						"hotLine": "09484635713",
+						"hotLine": "09081139032",
 						"hotLine2": "911"
 					},
 					{
 						"emer": "Ambulance",
 						"munId": "6902bbb8c1002226dfb5ac17",
 						"provId": "68c74c68ea5c361ae5d907f6",
-						"hotLine": "09484635713",
+						"hotLine": "09081139032",
 						"hotLine2": "911"
 					}
 				]
@@ -806,85 +806,7 @@
 					]
 				]
 			}
-		},
-
-			{
-			"type": "Feature",
-			"properties": {
-				"provId": "69105907f417971623c86043",
-				"munId": "691058d2f417971623c8603d",
-				"municipality": "Marikina_City",
-				"hotline": "09484635713",
-				"isDrrCodeEnabled": "yes",
-				"emergencyList": [
-					
-					{
-						"emer": "Fire",
-						"munId": "691058d2f417971623c8603d",
-						"provId": "69105907f417971623c86043",
-						"hotLine": "09484635713",
-						"hotLine2": "911"
-					},
-								
-					{
-						"emer": "Police",
-						"munId": "691058d2f417971623c8603d",
-						"provId": "69105907f417971623c86043",
-						"hotLine": "09484635713",
-						"hotLine2": "911"
-					},
-
-					{
-						"emer": "Flood",
-						"munId": "691058d2f417971623c8603d",
-						"provId": "69105907f417971623c86043",
-						"hotLine": "09484635713",
-						"hotLine2": ""
-					},
-					
-					{
-						"emer": "Medical",
-						"munId": "691058d2f417971623c8603d",
-						"provId": "69105907f417971623c86043",
-						"hotLine": "09484635713",
-						"hotLine2": ""
-					},
-					{
-						"emer": "Road_Accident",
-						"munId": "691058d2f417971623c8603d",
-						"provId": "69105907f417971623c86043",
-						"hotLine": "09484635713",
-						"hotLine2": "911"
-					},
-					{
-						"emer": "Ambulance",
-						"munId": "691058d2f417971623c8603d",
-						"provId": "69105907f417971623c86043",
-						"hotLine": "09484635713",
-						"hotLine2": "911"
-					}
-				]
-			},
-			"geometry": {
-				"type": "Polygon",
-				"coordinates": [
-					[
-						[
-							121.028434, 14.631307
-						],
-						[
-							121.107576, 14.698149 
-						],
-						[
-							121.153637, 14.643867
-						],
-						[
-							121.060677, 14.592814 
-						]
-						
-					]
-				]
-			}
 		}
+
 	]
 }
